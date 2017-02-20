@@ -1,0 +1,20 @@
+{
+  "name": "dockertest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "bash start.sh",    
+    "test": "bash test.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sscchan/dockertest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sscchan/dockertest/issues"
+  },
+  "homepage": "https://github.com/sscchan/dockertest#readme"
+}

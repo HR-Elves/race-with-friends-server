@@ -1,0 +1,17 @@
+version: "2.0"
+services:
+  web:
+    build: ./RouterService/.
+    ports:
+      - "8000:8000"
+    depends_on:
+      - runservice
+
+  runservice:
+    build: ./RunsService/.
+    ports:  
+      - "5000:5000"
+
+  monitor:
+    build: ./RunsService/.  
+    command: /bin/bash
