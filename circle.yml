@@ -10,7 +10,7 @@ machine:
 
 test:
   pre:
-    - sudo service postgresl stop
+    - sudo service postgresql stop
     - sudo service mysql stop
     - bash start.sh
 
