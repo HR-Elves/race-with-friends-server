@@ -18,6 +18,9 @@ services:
       - usersdb
 
   usersdb:
+    # Inside the container, access the database via:
+    # mysql --user=root --password=elves rwfusers
+    # mysql --user=<user_name> --password=<your_password> <db_name>   
     image: mysql:5.7    
     restart: always
     ports:
@@ -37,6 +40,9 @@ services:
       - runsdb
 
   runsdb:
+    # Inside the container, access the database via:
+    # psql -h localhost -p 5432 rwfruns elves
+    # psgl -h <hostname or ip> -p <port #> <database> <username>
     image: postgres:9.5.6    
     restart: always
     ports:
