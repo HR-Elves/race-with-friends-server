@@ -4,4 +4,4 @@
 docker-compose down
 
 # Rebuild the docker-composed containers
-docker-compose up --build -d
+docker-compose up --build
