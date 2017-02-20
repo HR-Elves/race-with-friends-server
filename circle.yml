@@ -10,6 +10,8 @@ machine:
 
 test:
   pre:
+    - sudo service postgresl stop
+    - sudo service mysql stop
     - bash start.sh
 
   override:
