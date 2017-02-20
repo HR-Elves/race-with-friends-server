@@ -6,10 +6,10 @@ const port = process.env.PORT || 5000;
 var counter = 0;
 
 app.get('/', function (req, res) {
-  res.send('RunServicesOK! - Counter is: '+ counter);
+  res.send('UsersServicesOK! - Counter is: ' + counter);
   counter++;  
 });
 
 app.listen(port, function() {
-  console.log('Runs Management Service listening on port: ', port);
+  console.log('Users Management Service listening on port: ', port);
 });
