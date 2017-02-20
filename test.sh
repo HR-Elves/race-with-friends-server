@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Debug docker version
-echo | docker-compose -v
+#echo | docker-compose -v
 
 # Stop any existing docker-composed containers
 docker-compose down

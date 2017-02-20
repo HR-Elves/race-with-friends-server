@@ -10,8 +10,11 @@ machine:
 
 test:
   pre:
-    - bash start.sh
+    - sudo service postgresql stop
+    - sudo service mysql stop
+    - docker-compose up --build -d
 
   override:
-    - docker-compose run web npm test
-    - docker-compose run runservice npm test 
+    - docker-compose run router npm test
+    - docker-compose run usersservice npm test
+    - docker-compose run runsservice npm test
