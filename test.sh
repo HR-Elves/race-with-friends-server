@@ -10,8 +10,9 @@ docker-compose down
 docker-compose up --build -d
 
 # Run Tests
-docker-compose run web npm test
-docker-compose run runservice npm test 
+docker-compose run router npm test
+docker-compose run runsservice npm test 
+docker-compose run usersservice npm test
 
 # Remove test containers
 docker-compose down
