@@ -1,7 +1,7 @@
 version: "2.0"
 services:
   router:
-    build: ./Router/.
+    image: hr52elves/router:latest
     ports:
       - "8000:8000"
     depends_on:
@@ -9,7 +9,7 @@ services:
       - usersservice
 
   usersservice:
-    build: ./UsersService/.
+    image: hr52elves/usersservice:latest
     environment:
       USERDB_HOST: usersdb:3306
       USERDB_DATABASE: rwfusers
@@ -32,7 +32,7 @@ services:
       MYSQL_DATABASE: rwfusers
 
   runsservice:
-    build: ./RunsService/.
+    image: hr52elves/runsservice:latest
     ports:  
       - "5000:5000"
     depends_on:

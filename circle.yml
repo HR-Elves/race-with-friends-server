@@ -18,3 +18,9 @@ test:
     - docker-compose run router npm test
     - docker-compose run usersservice npm test
     - docker-compose run runsservice npm test
+
+deployment:
+  staging:
+    branch: integration
+    commands:
+      - bash deploy.sh

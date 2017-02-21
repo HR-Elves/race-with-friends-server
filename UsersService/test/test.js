@@ -6,7 +6,7 @@ describe('Default Test Placeholder', function() {
     expect(1).to.equal(1);
   });
 
-  it('Should always fail this test', function() {
+  xit('Should always fail this test', function() {
     expect(1).to.equal(2);
   });
 });
