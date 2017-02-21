@@ -1,3 +1,10 @@
+var fs = require('fs');
+var https = require('https');
+var privateKey = fs.readFileSync('/etc/letsencrypt/live/www.racewithfriends.tk/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/letsencrypt/live/www.racewithfriends.tk/fullchain.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
 const express = require('express');
 const app = express();
 
@@ -27,7 +34,6 @@ app.get('/', function (req, res) {
     }
   });
 
-  // res.send('CONTAINERIZED EXPERIMENT SUCCESSFUL')
 });
 
 function checkRunsService(callback) {
@@ -53,6 +59,10 @@ function checkUsersService(callback) {
 }
 
 
-app.listen(port, function() {
+https.createServer(credentials, app).listen(port, function() {
   console.log('Example app listening on port: ', port);
 });
+
+// app.listen(port, function() {
+//   console.log('Example app listening on port: ', port);
+// });
