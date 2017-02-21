@@ -1,0 +1,59 @@
+version: "2.0"
+services:
+  router:
+    image: hr52elves/router:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - runsservice
+      - usersservice
+
+  usersservice:
+    image: hr52elves/usersservice:latest
+    environment:
+      USERDB_HOST: usersdb:3306
+      USERDB_DATABASE: rwfusers
+      USERDB_PASSWORD: elves
+    depends_on:
+      - usersdb
+
+  usersdb:
+    # Inside the container, access the database via:
+    # mysql --user=root --password=elves rwfusers
+    # mysql --user=<user_name> --password=<your_password> <db_name>   
+    image: mysql:5.7    
+    restart: always
+    ports:
+      - "3306:3306"    
+    volumes:
+      - usersdb_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: elves
+      MYSQL_DATABASE: rwfusers
+
+  runsservice:
+    image: hr52elves/runsservice:latest
+    ports:  
+      - "5000:5000"
+    depends_on:
+      - usersservice
+      - runsdb
+
+  runsdb:
+    # Inside the container, access the database via:
+    # psql -h localhost -p 5432 rwfruns elves
+    # psgl -h <hostname or ip> -p <port #> <database> <username>
+    image: postgres:9.5.6    
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - runsdb_data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: elves
+      POSTGRES_PASSWORD: elves
+      POSTGRES_DB: rwfruns
+
+volumes:
+  runsdb_data:
+  usersdb_data:
