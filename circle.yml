@@ -21,5 +21,6 @@ test:
 
 deployment:
   staging:
+    branch: integration
     commands:
       - bash deploy.sh
