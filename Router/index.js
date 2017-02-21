@@ -34,7 +34,7 @@ function checkRunsService(callback) {
   console.log('Checking RunsService...');
   request({url: 'http://runsservice:5000', timeout: 1000}, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      callback(null, 'RunsServiceReached! Service Says: ' + body);
+      callback(null, 'RunsServiceReached - AutoDeploy Tested! Service Says: ' + body);
     } else {
       callback(new Error(error), null);
     }
