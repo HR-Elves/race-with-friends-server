@@ -7,6 +7,8 @@ services:
     depends_on:
       - runsservice
       - usersservice
+    volumes:
+      - /etc/letsencrypt/live/www.racewithfriends.tk:/etc/letsencrypt/live/www.racewithfriends.tk      
 
   usersservice:
     image: hr52elves/usersservice:latest
