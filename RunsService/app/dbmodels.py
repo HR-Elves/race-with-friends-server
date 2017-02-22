@@ -9,7 +9,7 @@ class Run(db.Model):
   description = db.Column(db.Text)
   length = db.Column(db.Float)
   duration = db.Column(db.Float)
-  created_on = db.Column(DateTime)
+  created_on = db.Column(db.DateTime)
   user_id = db.Column(db.Text)
   data_points = db.relationship('DataPoint', backref='run', lazy='dynamic')
 
@@ -26,7 +26,7 @@ class DataPoint(db.Model):
   latitude = db.Column(db.Float)
   longitude = db.Column(db.Float)
   altitude = db.Column(db.Float)
-  timestamp = db.Column(DateTime)
+  timestamp = db.Column(db.DateTime)
   time_delta = db.Column(db.Float)
   time_total = db.Column(db.Float)
   dist_delta = db.Column(db.Float)
