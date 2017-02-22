@@ -1,8 +1,11 @@
 from flask import Flask
 from flask import request
+from flask import Response
+
+import datetime
+import json
 
 app = Flask(__name__)
-
 
 # When running locally
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://<username>:<password>@localhost:5432/<databasename>'
@@ -11,23 +14,40 @@ app = Flask(__name__)
 # When running within a container
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://elves:elves@runsdb:5432/rwfruns'
 
-from dbmodels import Dummy
+from dbmodels import db, Run, DataPoint
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/")
 def hello():
     dataDict = request.get_json()
-    return "Hello World from Flask using Python 3.5 Yes!" + dataDict['userid']
+    return "Hello World from Flask using Python 3.5 Yes!"
 
 @app.route("/test", methods=['GET', 'POST'])
 def test():
-    users = Dummy.query.all()
-    return "Hello World, arrived to test!" + users;
+    return "Hello World, arrived to test!"
 
 @app.route("/users/<userID>/runs")
 def get_runs_belonging_to(userID):
     return "/Users/<userID>/runs endpoint with userID = " + userID
 
-# DEVELOPMENT ONLY
+# Maintenance
+@app.route("/status")
+def status_check():
+    return "RunsService is UP!"
+
+# Debug
+@app.route("/reflect/string", methods=['GET', 'POST'])
+def reflect_as_string():
+    dataDict = request.get_json()
+    return "HTTP POST JSON data: " + str(dataDict);
+
+@app.route("/reflect/JSON", methods=['GET', 'POST'])
+def reflect_as_JSON():
+    dataDict = request.get_json()
+    response = Response(json.dumps(dataDict))
+    response.headers['Content-Type'] = 'application/json'
+    return response;
+
+# Admin
 @app.route("/admin/database")
 def admin_get_database_entry():
     displayValue = ''
