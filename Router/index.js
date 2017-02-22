@@ -38,7 +38,7 @@ app.get('/', function (req, res) {
 
 function checkRunsService(callback) {
   console.log('Checking RunsService...');
-  request({url: 'http://runsservice:5000', timeout: 1000}, function (error, response, body) {
+  request({url: 'http://runsservice:80', timeout: 1000}, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       callback(null, 'RunsServiceReached - AutoDeploy Double Tested! Service Says: ' + body);
     } else {
