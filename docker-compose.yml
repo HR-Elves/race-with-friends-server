@@ -7,6 +7,8 @@ services:
     depends_on:
       - runsservice
       - usersservice
+    volumes:
+      - /etc/letsencrypt/:/etc/letsencrypt/      
 
   usersservice:
     build: ./UsersService/.
