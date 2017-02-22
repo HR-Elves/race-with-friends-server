@@ -37,8 +37,8 @@ services:
 
   runsservice:
     build: ./RunsService/.
-    ports:
-      - "5000:5000"
+    ports:  
+      - "5000:80"
     depends_on:
       - usersservice
       - runsdb
