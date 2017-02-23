@@ -94,5 +94,16 @@ def handle_post_user_runs(request, userid):
 def handle_get_user_runs(request, userid):
     response = Response()
 
-    return "hello"
+    responseContent = []
+    user_runs = Run.query.filter_by(user_id=userid)
+    if user_runs is None:
+        response.status_code = 404
+    else:
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+        for run in user_runs:
+            responseContent.append(run.as_Dict())
+        response.data = json.dumps(responseContent)
+
+    return response
 
