@@ -13,19 +13,14 @@ def handle_get_run(request, runid):
     response = Response()
     retrieved_run = Run.query.get(runid)
     if retrieved_run is None:
-      response.status_code = 404
+        response.status_code = 404
     else:
         run = retrieved_run
-        run_Dict = {
-            'id' : run.id,
-            'user_id': run.user_id,
-            'name' : run.name,
-            'description' : run.description,
-            'length' : run.length,
-            'duration' : run.duration,
-            'created_on' : run.created_on,
-            'data' : []
-        }
+        run_Dict = run.as_Dict()
+
+        # The Model does not inherently have the data points
+        # Manually attaching datapoints to the response body
+        run_Dict['data'] = []
 
         run_datapoints = DataPoint.query.filter_by(run_id=runid)
         if run_datapoints is not None:
@@ -35,6 +30,26 @@ def handle_get_run(request, runid):
         response.status_code = 200
         response.headers['Content-Type'] = 'application/json'
         response.data = json.dumps(run_Dict)
+
+    return response
+
+def handle_delete_run(request, runid):
+    response = Response()
+    retrieved_run = Run.query.get(runid)
+    if retrieved_run is None:
+        response.status_code = 404
+    else:
+        # Add all datapoints belonging to this run to
+        # queue to be deleted
+        DataPoint.query.filter_by(run_id=runid)
+        if run_datapoints is not None:
+            for datapoint in run_datapoints:
+                db.session.delete(datapoint)
+
+        # Delete the run as well
+        db.session.delete(retrieved_run)
+        db.session.commit()
+        response.status_code = 200
 
     return response
 
@@ -64,7 +79,8 @@ def handle_post_user_runs(request, userid):
             new_datapoint = DataPoint()
             new_datapoint.latitude = datapoint.get('lat')
             new_datapoint.longitude = datapoint.get('long')
-            new_datapoint.altitude = datapoint.get('altitude')
+            new_datapoint.altitude = datapoint.get('alt')
+            new_datapoint.accuracy = datapoint.get('accuracy')            
             new_datapoint.timestamp = datapoint.get('timestamp')
             new_datapoint.time_delta = datapoint.get('timeDelta')             
             new_datapoint.time_total = datapoint.get('timeTotal')

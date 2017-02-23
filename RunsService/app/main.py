@@ -35,7 +35,7 @@ def handle_run(runid):
     elif (request.method == 'PUT'):
         return "Arrived @ /runs/<runid> PUT"
     elif (request.method == 'DELETE'):
-        return "Arrived @ /runs/<runid> DELETE"
+        return handle_delete_run(request, runid)
 
 #############################
 # User's Runs (with userid)
