@@ -30,7 +30,14 @@ class Run(db.Model):
             'length' : self.length,
             'duration' : self.duration,
             'created_on' : self.created_on,
+            'data' : []
         }
+        
+        run_datapoints = DataPoint.query.filter_by(run_id=self.id)
+        if run_datapoints is not None:
+            for datapoint in run_datapoints:
+                selfAsDict['data'].append(datapoint.as_Dict())
+
         return selfAsDict
 
 

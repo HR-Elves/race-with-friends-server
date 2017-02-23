@@ -15,17 +15,7 @@ def handle_get_run(request, runid):
     if retrieved_run is None:
         response.status_code = 404
     else:
-        run = retrieved_run
-        run_Dict = run.as_Dict()
-
-        # The Model does not inherently have the data points
-        # Manually attaching datapoints to the response body
-        run_Dict['data'] = []
-
-        run_datapoints = DataPoint.query.filter_by(run_id=runid)
-        if run_datapoints is not None:
-            for datapoint in run_datapoints:
-                run_Dict['data'].append(datapoint.as_Dict())
+        run_Dict = retrieved_run.as_Dict()
 
         response.status_code = 200
         response.headers['Content-Type'] = 'application/json'
@@ -56,6 +46,11 @@ def handle_delete_run(request, runid):
 #############################
 # User's Runs (with userid)
 #############################
+
+# Retrieve all runs made by the user from the database
+def handle_get_user_runs(request, userid):
+    response = Response()
+    return "hello"
 
 def handle_post_user_runs(request, userid):
     run_info = request.get_json()
@@ -98,4 +93,6 @@ def handle_post_user_runs(request, userid):
 
 def handle_get_user_runs(request, userid):
     response = Response()
+
     return "hello"
+
