@@ -10,6 +10,8 @@ services:
 
   usersservice:
     build: ./UsersService/.
+    ports:
+      - "4000:5000"
     environment:
       USERDB_HOST: usersdb:3306
       USERDB_DATABASE: rwfusers
@@ -20,11 +22,11 @@ services:
   usersdb:
     # Inside the container, access the database via:
     # mysql --user=root --password=elves rwfusers
-    # mysql --user=<user_name> --password=<your_password> <db_name>   
-    image: mysql:5.7    
+    # mysql --user=<user_name> --password=<your_password> <db_name>
+    image: mysql:5.7
     restart: always
     ports:
-      - "3306:3306"    
+      - "3306:3306"
     volumes:
       - usersdb_data:/var/lib/mysql
     environment:
@@ -33,7 +35,7 @@ services:
 
   runsservice:
     build: ./RunsService/.
-    ports:  
+    ports:
       - "5000:5000"
     depends_on:
       - usersservice
@@ -43,7 +45,7 @@ services:
     # Inside the container, access the database via:
     # psql -h localhost -p 5432 rwfruns elves
     # psgl -h <hostname or ip> -p <port #> <database> <username>
-    image: postgres:9.5.6    
+    image: postgres:9.5.6
     restart: always
     ports:
       - "5432:5432"
