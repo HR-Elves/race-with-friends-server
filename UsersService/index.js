@@ -22,6 +22,13 @@ app.get('/friends/:id', function(req, res) {
 
 })
 
+app.post('/signup', function(req, res) {
+  req.body = 'dummy';
+  routeHelpers.addUser(req.body, response => {
+    res.send('dummy');
+  })
+})
+
 app.listen(port, function() {
   console.log('Users Management Service listening on port: ', port);
 });
