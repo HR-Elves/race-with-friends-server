@@ -21,6 +21,17 @@ class Run(db.Model):
 
         return displayString
 
+    def as_Dict(self):
+        selfAsDict = {
+            'id' : self.id,
+            'user_id': self.user_id,
+            'name' : self.name,
+            'description' : self.description,
+            'length' : self.length,
+            'duration' : self.duration,
+            'created_on' : self.created_on,
+        }
+        return selfAsDict
 
 
 class DataPoint(db.Model):
@@ -28,6 +39,7 @@ class DataPoint(db.Model):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     altitude = db.Column(db.Float)
+    accuracy = db.Column(db.Float)
     timestamp = db.Column(db.Text)
     time_delta = db.Column(db.Integer)
     time_total = db.Column(db.BigInteger)
@@ -39,9 +51,10 @@ class DataPoint(db.Model):
         selfAsDict = {
           'lat' : self.latitude,
           'long' : self.longitude,
-          'altitude' : self.altitude,
+          'alt' : self.altitude,
+          'accuracy' : self.accuracy,
           'timestamp' : self.timestamp,
-          'timeDelta' : self.distance_delta,      
+          'timeDelta' : self.time_delta,      
           'timeTotal' : self.time_total,
           'distanceDelta' : self.distance_delta,
           'distanceTotal' : self.distance_total,
