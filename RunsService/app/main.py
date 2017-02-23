@@ -13,14 +13,16 @@ app = Flask(__name__)
 
 # When running within a container
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://elves:elves@runsdb:5432/rwfruns'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True      
 
 from dbmodels import db, Run, DataPoint
+from endpoints_handler import *
 
 
 @app.route("/")
 def root():
     dataDict = request.get_json()
-    return "Reached UsersService!"
+    return "Reached UsersService!" + endpointtest()
 
 #####################
 # Runs (with runid)
@@ -29,7 +31,7 @@ def root():
 @app.route("/runs/<runid>", methods=['GET', 'PUT', 'DELETE'])
 def handle_run(runid):
     if (request.method == 'GET'):
-        return "Arrived @ /runs/<runid> GET"
+        return handle_get_run(request, runid)
     elif (request.method == 'PUT'):
         return "Arrived @ /runs/<runid> PUT"
     elif (request.method == 'DELETE'):
@@ -42,9 +44,9 @@ def handle_run(runid):
 @app.route("/users/<userid>/runs", methods=['GET', 'POST'])
 def handle_user_runs(userid):
     if (request.method == 'GET'):
-        return "Arrived @ /users/<userid>/runs GET"
+        return handle_get_user_runs(request, userid)
     elif (request.method == 'POST'):
-        return "Arrived @ /users/<userid>/runs POST"
+        return handle_post_user_runs(request, userid)
 
 ###########################
 # User's Run (with runid)
