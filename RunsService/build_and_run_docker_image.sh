@@ -3,16 +3,16 @@
 set -xv
 
 # Global Variables
-DOCKER_IMAGE_NAME="runwithfriends/runservice"
-DOCKER_CONTAINER_NAME="runservice"
-#DOCKER_EXPOSE_PORT="80"
+DOCKER_IMAGE_NAME="runwithfriends/flasktest"
+DOCKER_CONTAINER_NAME="rwfflasktest"
+DOCKER_EXPOSE_PORT="80"
 
 # Stop any already-running containers that belongs to our image
 docker stop $DOCKER_CONTAINER_NAME
 
 # Sleep for 11 seconds to allow the running docker container's
 # main process 
-sleep 11
+sleep 2
 
 # Remove any "exited" docker containers
 docker rm -v $(docker ps -a -q -f status=exited)
@@ -27,4 +27,4 @@ docker rmi $DOCKER_IMAGE_NAME
 docker build -t $DOCKER_IMAGE_NAME .
 
 # Run our newly built image in a new container named "$DOCKER_CONTAINER_NAME"
-docker run --init --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE_NAME
+docker run --init -p $DOCKER_EXPOSE_PORT:$DOCKER_EXPOSE_PORT --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE_NAME
