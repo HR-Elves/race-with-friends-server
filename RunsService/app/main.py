@@ -16,25 +16,61 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://elves:elves@runsdb:5432/rw
 
 from dbmodels import db, Run, DataPoint
 
+
 @app.route("/")
-def hello():
+def root():
     dataDict = request.get_json()
-    return "Hello World from Flask using Python 3.5 Yes!"
+    return "Reached UsersService!"
 
-@app.route("/test", methods=['GET', 'POST'])
-def test():
-    return "Hello World, arrived to test!"
+#####################
+# Runs (with runid)
+#####################
 
-@app.route("/users/<userID>/runs")
-def get_runs_belonging_to(userID):
-    return "/Users/<userID>/runs endpoint with userID = " + userID
+@app.route("/runs/<runid>", methods=['GET', 'PUT', 'DELETE'])
+def handle_run(runid):
+    if (request.method == 'GET'):
+        return "Arrived @ /runs/<runid> GET"
+    elif (request.method == 'PUT'):
+        return "Arrived @ /runs/<runid> PUT"
+    elif (request.method == 'DELETE'):
+        return "Arrived @ /runs/<runid> DELETE"
 
+#############################
+# User's Runs (with userid)
+#############################
+
+@app.route("/users/<userid>/runs", methods=['GET', 'POST'])
+def handle_user_runs(userid):
+    if (request.method == 'GET'):
+        return "Arrived @ /users/<userid>/runs GET"
+    elif (request.method == 'POST'):
+        return "Arrived @ /users/<userid>/runs POST"
+
+###########################
+# User's Run (with runid)
+###########################
+
+@app.route("/users/<userid>/runs/<runid>", methods=['GET', 'PUT', 'DELETE'])
+def handle_user_run(userid, runid):
+    if (request.method == 'GET'):
+        return "Arrived @ /users/<userid>/runs/<runid> GET"
+    elif (request.method == 'PUT'):
+        return "Arrived @ /users/<userid>/runs/<runid> PUT"
+    elif (request.method == 'DELETE'):
+        return "Arrived @ /users/<userid>/runs/<runid> DELETE"
+
+##################
 # Maintenance
+##################
+
 @app.route("/status")
 def status_check():
     return "RunsService is UP!"
 
+##################
 # Debug
+##################
+
 @app.route("/reflect/string", methods=['GET', 'POST'])
 def reflect_as_string():
     dataDict = request.get_json()
@@ -47,7 +83,9 @@ def reflect_as_JSON():
     response.headers['Content-Type'] = 'application/json'
     return response;
 
+##################
 # Admin
+##################
 @app.route("/admin/database")
 def admin_get_database_entry():
     displayValue = ''
