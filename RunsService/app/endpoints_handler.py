@@ -11,13 +11,30 @@ def endpointtest():
 
 def handle_get_run(request, runid):
     response = Response()
-    retrieved_run = Run.query.get(1)
-    if len(retrieved_run) == 0:
+    retrieved_run = Run.query.get(runid)
+    if retrieved_run is None:
       response.status_code = 404
     else:
-      response.status_code = 200
-      response.headers['Content-Type'] = 'application/json'
-      # response.data = json.dumps()
+        run = retrieved_run
+        run_Dict = {
+            'id' : run.id,
+            'user_id': run.user_id,
+            'name' : run.name,
+            'description' : run.description,
+            'length' : run.length,
+            'duration' : run.duration,
+            'created_on' : run.created_on,
+            'data' : []
+        }
+
+        run_datapoints = DataPoint.query.filter_by(run_id=runid)
+        if run_datapoints is not None:
+            for datapoint in run_datapoints:
+                run_Dict['data'].append(datapoint.as_Dict())
+
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+        response.data = json.dumps(run_Dict)
 
     return response
 
@@ -26,13 +43,37 @@ def handle_get_run(request, runid):
 #############################
 
 def handle_post_user_runs(request, userid):
-    data = request.get_json()
+    run_info = request.get_json()
     new_run = Run()
     new_run.user_id = userid
-    new_run.name = data['name']
-    new_run.description = data['description']
+    new_run.name = run_info.get('name')
+    new_run.description = run_info.get('description')
+    new_run.length = run_info.get('length')
+    new_run.duration = run_info.get('duration')
+    new_run.created_on = run_info.get('created_on')
 
+    # add new object and flush the session to obtain the run entry's id
+    # hold off on a commit because we want the DB write to include both
+    # run and it's data points
     db.session.add(new_run)
+    db.session.flush()
+
+    run_datapoints = run_info.get('data')
+    if run_datapoints is not None:
+        for datapoint in run_datapoints:
+            new_datapoint = DataPoint()
+            new_datapoint.latitude = datapoint.get('lat')
+            new_datapoint.longitude = datapoint.get('long')
+            new_datapoint.altitude = datapoint.get('altitude')
+            new_datapoint.timestamp = datapoint.get('timestamp')
+            new_datapoint.time_delta = datapoint.get('timeDelta')             
+            new_datapoint.time_total = datapoint.get('timeTotal')
+            new_datapoint.distance_delta = datapoint.get('distanceDelta')        
+            new_datapoint.distance_total = datapoint.get('distanceTotal')
+            new_datapoint.run_id = new_run.id
+
+            db.session.add(new_datapoint)
+
     db.session.commit()
 
     responseContent = {'id': new_run.id}
