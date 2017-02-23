@@ -2,10 +2,13 @@ const express = require('express');
 const app = express();
 const routeHelpers = require('./server/routeHelpers.js');
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 
 const port = process.env.PORT || 5000;
 
 var counter = 0;
+
+app.use(bodyParser.json()); // for parsing application/json
 
 app.get('/', function (req, res) {
   res.send('UsersServicesOK! - Counter is: ' + counter);
@@ -23,9 +26,9 @@ app.get('/friends/:id', function(req, res) {
 })
 
 app.post('/signup', function(req, res) {
-  req.body = 'dummy';
+  // console.log('req.body', req.body)
   routeHelpers.addUser(req.body, response => {
-    res.send('dummy');
+    res.sendStatus(200);
   })
 })
 

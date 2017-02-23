@@ -23,7 +23,7 @@ var routeHelpers = {
   },
 
   addUser(profile) {
-    dbHelpers.addUser(profile);
+    dbHelpers.addUser(profile)
   },
 
   getUserProfile: function(userID, callback) {
