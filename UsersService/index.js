@@ -15,26 +15,58 @@ app.get('/', function (req, res) {
   counter++;
 });
 
-app.get('/sessions/:token', function(req, res) {
-  routeHelpers.verifyToken(req.params.token, response => {
-    res.send(response);
+app.get('/auth/:token', function(req, res) {
+  routeHelpers.verifyToken(req.params.token, (err, success) => {
+    if (err) {
+      res.statusCode(401);
+    } else {
+      res.send(success);
+    }
   })
-})
+});
+
+app.post('/users/', function(req, res) {
+
+  routeHelpers.getUserProfile(req.body.profile, (err, success) => {
+    if (err) {
+      res.statusCode(401);
+    } else {
+      res.send(success);
+    }
+  })
+});
+
+
+
+//TODO:figure out which endpoint makes more sense. this performs same as above endpoint
+app.post('/auth', function(req, res) {
+  console.log(req.body.id_token)
+  // res.send(req.body)
+  routeHelpers.verifyToken(req.body.id_token, (err, success) => {
+    if (err) {
+      res.send(401);
+    } else {
+      res.send(success);
+    }
+  })
+});
 
 app.get('/friends/:id', function(req, res) {
 
-})
+});
 
 app.post('/signup', function(req, res) {
-  // console.log('req.body', req.body)
-  routeHelpers.addUser(req.body, response => {
-    res.sendStatus(200);
+  routeHelpers.addUser(req.body, (err, response) => {
+    res.send(response);
   })
-})
+});
+
+// app.post('/signin', function(req, res) {
+//   routeHelpers.verifyToken(req.body, response => {
+//     res.send(response)
+//   })
+// });
 
 app.listen(port, function() {
   console.log('Users Management Service listening on port: ', port);
 });
-
-
-// var token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL25pY2tjb2JiZXR0LmF1dGgwLmNvbS8iLCJzdWIiOiJmYWNlYm9va3wxMDEwNDg0MTg1MTU5NzQ4MyIsImF1ZCI6Ilh4eUo4WUsycXlzRVVTWGJyckJTUVBPT0poYUwzN29NIiwiZXhwIjoxNDg3ODQyNjEwLCJpYXQiOjE0ODc4MDY2MTB9.NoFYt4cSi0dTORKZYYfoohAj-pZWC0U3fSIca5Dpwwk

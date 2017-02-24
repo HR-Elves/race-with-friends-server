@@ -14,22 +14,22 @@ var routeHelpers = {
   verifyToken: function(token, callback) {
     jwt.verify(token, secret, (err, success) => {
       if (err) {
-        console.log('err', err)
+        console.log('routeHelpers -> verifyToken', err)
+        callback(err)
       } else {
-        callback(success)
-        console.log('success verifyToken', success)
+        callback(null, success)
       }
     });
   },
 
-  addUser(profile) {
-    dbHelpers.addUser(profile)
-  },
-
-  getUserProfile: function(userID, callback) {
-    //takes in userID
-
-    //
+  getUserProfile: function(profile, callback) {
+    dbHelpers.findUser(profile, (err, success) => {
+      if (err) {
+        console.log('routeHelpers -> addUser', err)
+      } else {
+        callback(null, success);
+      }
+    })
   }
 
 }
