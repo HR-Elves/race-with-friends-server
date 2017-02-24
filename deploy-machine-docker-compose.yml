@@ -12,6 +12,8 @@ services:
 
   usersservice:
     image: hr52elves/usersservice:latest
+    ports:
+      - "4000:5000"    
     environment:
       USERDB_HOST: usersdb:3306
       USERDB_DATABASE: rwfusers
@@ -51,6 +53,7 @@ services:
       - "5432:5432"
     volumes:
       - runsdb_data:/var/lib/postgresql
+      - ./RunsDB:/docker-entrypoint-initdb.d      
     environment:
       POSTGRES_USER: elves
       POSTGRES_PASSWORD: elves
