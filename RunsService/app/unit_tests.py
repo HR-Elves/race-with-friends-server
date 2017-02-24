@@ -79,7 +79,7 @@ class UserServiceTestCase(TestCase):
         response = self.app.get('/users/non_existent_user/runs')
 
         print(' - Expect server to unable to location user and return 404')
-        assert response.status_code == 404
+        assert response.status_code == 404, 'actual status code:%d and data %s' % (response.status_code, response.data)
 
     def test_0070_handle_get_user_runs(self):
         print('+ Test: GET to /users/<userid>/runs with valid user')
@@ -105,7 +105,7 @@ class UserServiceTestCase(TestCase):
         print('+ Test: POST to /users/<userid>/runs')
 
         print(' - Expect to be able to post to /users/<userid>/runs.')
-        assert response.status_code == 200, "Expect 200 OK: Got: %d" % response.status_code
+        assert response.status_code == 200, "Expect 200 OK: Got: %d" %response.status_code
 
         print(' - Expect database to have one "run" entry')
         assert len(Run.query.all()) == 1
@@ -122,8 +122,15 @@ class UserServiceTestCase(TestCase):
         returned_run_id = json.loads(response.data.decode("utf-8")).get('id')
 
         response = self.app.get('/users/non_existent/runs/%d' %returned_run_id)
+
+        if response.data is None or response.data == b"":
+            response_data = ""
+        else:
+            print('%s' % response.data)
+            response_data = json.loads(response.data.decode("utf-8"))
+
         print(' - Expect database to return 404')
-        assert response.status_code == 404
+        assert response.status_code == 404, "Returned status code: %d and response body: %s" % (response.status_code, response_data)
 
 
     def test_0110_handle_get_user_run_with_valid_userid(self):
@@ -159,23 +166,7 @@ class UserServiceTestCase(TestCase):
         assert len(response_data) == 1
 
 
-    def test_0130_handle_delete_user_run_with_invalid_runid(self):
-        print('+ Test DELETE to /users/<userid>/runs/<runid> with valid userid and non-valid run_id')
-
-        # POST to populate database with a run
-        response = self.app.post('/users/joe/runs', data='{"name":"joe run 1"}', content_type='application/json')
-        returned_run_id = json.loads(response.data.decode("utf-8")).get('id')
-
-        response = self.app.get('/users/joe/runs/non_existent')
-        print(' - Expect database to return 404')
-        assert response.status_code == 404
-
-        response = self.app.get('/users/joe/runs')
-        response_data = json.loads(response.data.decode("utf-8"))        
-        print(' - Expect server to return one saved and not-deleted runs')
-        assert len(response_data) == 1        
-
-    def test_0140_handle_delete_user_run_with_valid_userid_and_run_id(self):
+    def test_0130_handle_delete_user_run_with_valid_userid_and_run_id(self):
         print('+ Test DELETE to /users/<userid>/runs/<runid> with valid userid and valid run_id')
 
         # POST to populate database with a run
