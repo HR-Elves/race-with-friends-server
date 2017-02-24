@@ -35,7 +35,7 @@ def handle_run(runid):
     elif (request.method == 'PUT'):
         return "Arrived @ /runs/<runid> PUT"
     elif (request.method == 'DELETE'):
-        return "Arrived @ /runs/<runid> DELETE"
+        return handle_delete_run(request, runid)
 
 #############################
 # User's Runs (with userid)
@@ -55,11 +55,11 @@ def handle_user_runs(userid):
 @app.route("/users/<userid>/runs/<runid>", methods=['GET', 'PUT', 'DELETE'])
 def handle_user_run(userid, runid):
     if (request.method == 'GET'):
-        return "Arrived @ /users/<userid>/runs/<runid> GET"
+        return handle_get_user_run(request, userid, runid)
     elif (request.method == 'PUT'):
         return "Arrived @ /users/<userid>/runs/<runid> PUT"
     elif (request.method == 'DELETE'):
-        return "Arrived @ /users/<userid>/runs/<runid> DELETE"
+        return handle_delete_user_run(request, userid, runid)
 
 ##################
 # Maintenance

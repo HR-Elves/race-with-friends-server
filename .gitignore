@@ -10,3 +10,5 @@ npm-debug.log
 **/venv
 **/__pycache__
 **/*.pyc
+
+**/UsersService/server/config/config.js
