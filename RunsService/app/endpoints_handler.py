@@ -42,7 +42,7 @@ def handle_delete_run(request, runid):
     else:
         # Add all datapoints belonging to this run to
         # queue to be deleted
-        run_datapoints = DataPoint.query.filter_by(run_id=runid)
+        run_datapoints = DataPoint.query.filter_by(run_id=runid).all()
         if run_datapoints is not None:
             for datapoint in run_datapoints:
                 db.session.delete(datapoint)
@@ -63,8 +63,13 @@ def handle_get_user_runs(request, userid):
     response = Response()
 
     responseContent = []
-    user_runs = Run.query.filter_by(user_id=userid)
-    if user_runs is None:
+    try:
+        user_runs = Run.query.filter_by(user_id=userid).all()
+    except:
+        response.status_code = 404
+        return response
+
+    if user_runs is None or len(user_runs) == 0:
         response.status_code = 404
     else:
         response.status_code = 200
@@ -125,7 +130,23 @@ def handle_post_user_runs(request, userid):
 ###########################
 
 def handle_get_user_run(request, userid, runid):
-    return handle_get_run(request, runid)
+    response = Response()
+    try:
+        retrieved_run = Run.query.filter_by(user_id=userid).filter_by(id=runid).one()
+    except:
+        response.status_code = 404
+        return response
+
+    if retrieved_run is None:
+        response.status_code = 404
+    else:
+        run_Dict = retrieved_run.as_Dict()
+
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+        response.data = json.dumps(run_Dict)
+
+    return response
 
 def handle_delete_user_run(request, userid, runid):
     return handle_delete_run(request, runid)
