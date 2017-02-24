@@ -13,11 +13,13 @@ services:
   usersservice:
     image: hr52elves/usersservice:latest
     ports:
-      - "4000:5000"    
+      - "4000:5000"
     environment:
       USERDB_HOST: usersdb:3306
       USERDB_DATABASE: rwfusers
       USERDB_PASSWORD: elves
+    volumes:
+      - /home/ubuntu/app/UsersService/server/config:/home/nodejs/app/server/config 
     depends_on:
       - usersdb
 
@@ -28,7 +30,7 @@ services:
     image: mysql:5.7    
     restart: always
     ports:
-      - "3306:3306"    
+      - "3306:3306"
     volumes:
       - usersdb_data:/var/lib/mysql
     environment:
@@ -53,7 +55,7 @@ services:
       - "5432:5432"
     volumes:
       - runsdb_data:/var/lib/postgresql
-      - ./RunsDB:/docker-entrypoint-initdb.d      
+      - ./RunsDB:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_USER: elves
       POSTGRES_PASSWORD: elves

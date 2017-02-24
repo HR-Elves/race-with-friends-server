@@ -18,6 +18,8 @@ services:
       USERDB_HOST: usersdb:3306
       USERDB_DATABASE: rwfusers
       USERDB_PASSWORD: elves
+    volumes:
+      - ./UsersService/server/config:/home/nodejs/app/server/config
     depends_on:
       - usersdb
 
