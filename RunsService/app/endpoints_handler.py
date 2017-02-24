@@ -149,4 +149,26 @@ def handle_get_user_run(request, userid, runid):
     return response
 
 def handle_delete_user_run(request, userid, runid):
-    return handle_delete_run(request, runid)
+    response = Response()
+
+    try:
+        retrieved_run = Run.query.filter_by(user_id=userid).filter_by(id=runid).one()
+    except:
+        response.status_code = 404
+        return response
+        
+    if retrieved_run is None:
+        response.status_code = 404
+    else:
+        # Add all datapoints belonging to this run to
+        # queue to be deleted
+        run_datapoints = DataPoint.query.filter_by(run_id=runid).all()
+        if run_datapoints is not None:
+            for datapoint in run_datapoints:
+                db.session.delete(datapoint)
+
+        # Delete the run as well
+        db.session.delete(retrieved_run)
+        db.session.commit()
+        response.status_code = 200
+
