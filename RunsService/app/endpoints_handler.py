@@ -11,7 +11,12 @@ def endpointtest():
 
 def handle_get_run(request, runid):
     response = Response()
-    retrieved_run = Run.query.get(runid)
+    try:
+        retrieved_run = Run.query.get(runid)
+    except:
+        response.status_code = 404
+        return response
+
     if retrieved_run is None:
         response.status_code = 404
     else:
@@ -25,13 +30,19 @@ def handle_get_run(request, runid):
 
 def handle_delete_run(request, runid):
     response = Response()
-    retrieved_run = Run.query.get(runid)
+
+    try:
+        retrieved_run = Run.query.get(runid)
+    except:
+        response.status_code = 404
+        return response
+        
     if retrieved_run is None:
         response.status_code = 404
     else:
         # Add all datapoints belonging to this run to
         # queue to be deleted
-        DataPoint.query.filter_by(run_id=runid)
+        run_datapoints = DataPoint.query.filter_by(run_id=runid)
         if run_datapoints is not None:
             for datapoint in run_datapoints:
                 db.session.delete(datapoint)
@@ -50,10 +61,28 @@ def handle_delete_run(request, runid):
 # Retrieve all runs made by the user from the database
 def handle_get_user_runs(request, userid):
     response = Response()
-    return "hello"
 
+    responseContent = []
+    user_runs = Run.query.filter_by(user_id=userid)
+    if user_runs is None:
+        response.status_code = 404
+    else:
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+        for run in user_runs:
+            responseContent.append(run.as_Dict())
+        response.data = json.dumps(responseContent)
+
+    return response
+
+# Add an additional run by a user
 def handle_post_user_runs(request, userid):
     run_info = request.get_json()
+    if run_info is None:
+        response = Response()
+        response.status_code = 400
+        return response
+
     new_run = Run()
     new_run.user_id = userid
     new_run.name = run_info.get('name')
@@ -91,19 +120,12 @@ def handle_post_user_runs(request, userid):
     response = Response(json.dumps(responseContent))
     return response
 
-def handle_get_user_runs(request, userid):
-    response = Response()
+###########################
+# User's Run (with runid)
+###########################
 
-    responseContent = []
-    user_runs = Run.query.filter_by(user_id=userid)
-    if user_runs is None:
-        response.status_code = 404
-    else:
-        response.status_code = 200
-        response.headers['Content-Type'] = 'application/json'
-        for run in user_runs:
-            responseContent.append(run.as_Dict())
-        response.data = json.dumps(responseContent)
+def handle_get_user_run(request, userid, runid):
+    return handle_get_run(request, runid)
 
-    return response
-
+def handle_delete_user_run(request, userid, runid):
+    return handle_delete_run(request, runid)
