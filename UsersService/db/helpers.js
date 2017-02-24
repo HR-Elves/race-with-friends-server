@@ -16,7 +16,7 @@ dbHelpers = {
   },
 
   findUser: function(profile, callback) {
-    console.log('profile in dbHelpers', JSON.stringify(profile.fb_id))
+    console.log('profile in dbHelpers', JSON.stringify(profile))
     var id = JSON.stringify(profile.fb_id)
     connection.query(`select * from users where fb_id=` + id + `;`, (err, success) => {
       if (err) {

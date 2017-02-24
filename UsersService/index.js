@@ -16,17 +16,19 @@ app.get('/', function (req, res) {
 });
 
 app.get('/auth/:token', function(req, res) {
+
   routeHelpers.verifyToken(req.params.token, (err, success) => {
     if (err) {
-      res.statusCode(401);
+      console.log(err)
+      res.json(err);
     } else {
-      res.send(success);
+      res.json(success);
     }
   })
 });
 
 app.post('/users/', function(req, res) {
-
+  console.log('request body: ', req.body.profile)
   routeHelpers.getUserProfile(req.body.profile, (err, success) => {
     if (err) {
       res.statusCode(401);
