@@ -25,7 +25,12 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/usersservice:latest'    
 
   echo "starting the new version"
+  # Copy over new deploy specific docker-compose file
   scp -r deploy-machine-docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/app/docker-compose.yml
+
+  # Copy over PostgreSQL testdb initialization configuration files to Deploy Server
+  scp -r ./RunDB/init_testdb.sql $DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/app/RunDB/init_testdb.sql
+
   ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker-compose up -d'
   echo "success!"
 
