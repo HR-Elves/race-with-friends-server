@@ -19,7 +19,7 @@ services:
       USERDB_DATABASE: rwfusers
       USERDB_PASSWORD: elves
     volumes:
-      - /home/ubuntu/app/UsersService/server/config:/home/nodejs/app/server/config 
+      - /home/ubuntu/app/UsersService/server/:/home/nodejs/app/server/
     depends_on:
       - usersdb
 
