@@ -40,7 +40,7 @@ services:
   runsservice:
     image: hr52elves/runsservice:latest
     ports:  
-      - "5000:5000"
+      - "5000:80"
     depends_on:
       - usersservice
       - runsdb
