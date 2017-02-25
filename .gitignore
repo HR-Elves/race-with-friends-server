@@ -12,3 +12,6 @@ npm-debug.log
 **/*.pyc
 
 **/UsersService/server/config/config.js
+
+runsdb_data
+usersdb_data

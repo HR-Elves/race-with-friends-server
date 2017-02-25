@@ -15,11 +15,13 @@ services:
     ports:
       - "4000:5000"
     environment:
-      USERDB_HOST: usersdb:3306
-      USERDB_DATABASE: rwfusers
-      USERDB_PASSWORD: elves
+      - USERDB_HOST=usersdb:3306
+      - USERDB_DATABASE=rwfusers
+      - USERDB_PASSWORD=elves
     volumes:
       - ./UsersService/server/config:/home/nodejs/app/server/config
+    command:
+      - /bin/bash
     depends_on:
       - usersdb
 
@@ -32,10 +34,10 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - usersdb_data:/var/lib/mysql
+      - ./usersdb_data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: elves
-      MYSQL_DATABASE: rwfusers
+      - MYSQL_ROOT_PASSWORD=elves
+      - MYSQL_DATABASE=rwfusers
 
   runsservice:
     build: ./RunsService/.
@@ -54,13 +56,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - runsdb_data:/var/lib/postgresql
+      - ./runsdb_data:/var/lib/postgresql
       - ./RunsDB:/docker-entrypoint-initdb.d
     environment:
-      POSTGRES_USER: elves
-      POSTGRES_PASSWORD: elves
-      POSTGRES_DB: rwfruns
-
-volumes:
-  runsdb_data:
-  usersdb_data:
+      - POSTGRES_USER=elves
+      - POSTGRES_PASSWORD=elves
+      - POSTGRES_DB=rwfruns
