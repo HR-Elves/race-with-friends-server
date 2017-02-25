@@ -12,7 +12,7 @@ test:
   pre:
     - sudo service postgresql stop
     - sudo service mysql stop
-    - if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then scp -r $DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/app/UsersService/server/config/config.js ./UsersService/server/config; fi
+    - if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then scp -r $DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/app/UsersService/server/config/config.js ./UsersService/server/config/config.js; fi
     - docker-compose up --build -d
 
   override:
