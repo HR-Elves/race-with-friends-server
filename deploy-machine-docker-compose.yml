@@ -32,7 +32,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - usersdb_data:/var/lib/mysql
+      - ./usersdb_data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=elves
       - MYSQL_DATABASE=rwfusers
@@ -54,13 +54,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - runsdb_data:/var/lib/postgresql
+      - ./runsdb_data:/var/lib/postgresql
       - ./RunsDB:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_USER=elves
       - POSTGRES_PASSWORD=elves
       - POSTGRES_DB=rwfruns
-
-volumes:
-  runsdb_data:
-  usersdb_data:
