@@ -7,11 +7,7 @@ var dbHelpers = require('../db/helpers.js');
 
 var routeHelpers = {
   parseTokenError: function(err, token, callback) {
-    // console.log('$$$$', jwtDecode(token));
-    if (err.message === "jwt expired") {
-      //refresh token or send to FE to refresh token
-      callback({isValid: false});
-    } else if (err.message === "invalid token") {
+    if (err.message === "jwt expired" || err.message === "invalid token") {
       callback({isValid: false});
     } else {
       callback(null, {isValid: true})
@@ -22,7 +18,6 @@ var routeHelpers = {
     jwt.verify(token, secret, (err, success) => {
       if (err) {
         console.log('routeHelpers -> verifyToken', err);
-        // callback(err)
         this.parseTokenError(err, token, callback);
       } else {
         callback(null, success);

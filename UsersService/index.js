@@ -27,9 +27,9 @@ app.get('/auth/:token', function(req, res) {
   })
 });
 
-app.post('/users/', function(req, res) {
-  console.log('request body: ', req.body.profile)
-  routeHelpers.getUserProfile(req.body.profile, (err, success) => {
+app.post('/users', function(req, res) {
+  console.log('request body: ', req.body)
+  routeHelpers.getUserProfile(req.body, (err, success) => {
     if (err) {
       res.statusCode(401);
     } else {
