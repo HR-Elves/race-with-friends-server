@@ -25,3 +25,8 @@ deployment:
     branch: integration
     commands:
       - bash deploy.sh
+
+  testStaging:
+    branch: RunsService
+    commands:
+      - bash deploy.sh      
