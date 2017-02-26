@@ -30,4 +30,4 @@ deployment:
   testStaging:
     branch: RunsService
     commands:
-      - bash deploy.sh      
+      - bash deploy.sh
