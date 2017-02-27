@@ -1,11 +1,21 @@
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
+var connectionParams = {
   host: "localhost",
   user: "root",
   password: "",
-  database : 'rwfusers'
-});
+  database : "rwfusers"
+}
+
+var isProduction = process.env.productionMode;
+
+if (isProduction) {
+  connectionParams.host = "usersdb:3306";
+  connectionParams.user = "root";
+  connectionParams.password = "elves";
+}
+
+var connection = mysql.createConnection(connectionParams);
 
 connection.connect(function(err){
   if(err){
