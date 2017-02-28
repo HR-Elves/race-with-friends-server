@@ -42,11 +42,11 @@ function isAuthenticated(req, res, next) {
   console.log('Authenticating...', req.query.token);
   request({url: 'http://usersservice:5000/auth/' + req.query.token, timeout: 1000}, function (error, response, body) {
     if (error) {
-      console.log('isAuthenticated ->', error)
+      console.log('isAuthenticated ->', error);
     } else if (response.statusCode === 200) {
       return next();
     } else if (response.statusCode === 401) {
-      res.status(400).send(response)
+      res.status(400).send(response);
       res.end();
     }
   });
