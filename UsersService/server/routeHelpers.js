@@ -10,7 +10,7 @@ var routeHelpers = {
     if (err.message === "jwt expired" || err.message === "invalid token") {
       callback({isValid: false});
     } else {
-      callback(null, {isValid: true})
+      callback(null, {isValid: true});
     }
   },
 
@@ -18,7 +18,8 @@ var routeHelpers = {
     jwt.verify(token, secret, (err, success) => {
       if (err) {
         console.log('routeHelpers -> verifyToken', err);
-        this.parseTokenError(err, token, callback);
+        // this.parseTokenError(err, token, callback);
+        callback(err);
       } else {
         callback(null, success);
       }
