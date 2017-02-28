@@ -32,11 +32,9 @@ def root():
 @app.route("/challenges/<challengeid>", methods=['GET', 'DELETE'])
 def handle_challenges(challengeid):
     if (request.method == 'GET'):
-        # return handle_get_challenge(request, challengeid)
-        return "Reached GET /challenges/<challengeid>"
+        return handle_get_challenge(request, challengeid)
     elif (request.method == 'DELETE'):
-        # return handle_delete_challange(request, challengeid)
-        return "Reached DELETE /challenges/<challengeid>"
+        return handle_delete_challange(request, challengeid)
 
 #######################################################
 # Retriving All Challenges where a User is an opponent
