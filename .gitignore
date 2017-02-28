@@ -15,3 +15,5 @@ npm-debug.log
 
 runsdb_data
 usersdb_data
+
+**/setdeployenvironmentvariables.sh
