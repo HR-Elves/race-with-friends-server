@@ -43,3 +43,11 @@ def handle_delete_challange(request, challengeid)
         response.status_code = 200
 
     return response
+
+def handle_add_new_challenge_by_user(request, userid)
+    response = Response()
+    challenge_info = request.get_json()
+
+    
+
+    return response

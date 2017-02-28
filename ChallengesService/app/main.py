@@ -69,8 +69,7 @@ def handle_user_challenges(userid):
         # return handle_get_user_challenges(request, userid)
         return "Reached GET /users/<userid>/challenges"
     elif (request.method == 'POST'):
-        # return handle_add_new_challenge_by_user(request, userid)
-        return "Reached POST /users/<userid>/challenges"
+        return handle_add_new_challenge_by_user(request, userid)
 
 ##################
 # Maintenance

@@ -28,6 +28,9 @@ deployment:
       - bash deploy.sh
 
   testStaging:
-    branch: RunsService
+    branch: 
+      - RunsService
+      - Router
+      - ChallengesService
     commands:
       - bash deploy.sh
