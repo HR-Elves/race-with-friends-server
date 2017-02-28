@@ -26,11 +26,22 @@ var routeHelpers = {
     });
   },
 
-  getUserProfile: function(profile, callback) {
-    dbHelpers.findUser(profile, (err, success) => {
+  getUserProfileById: function(profile, callback) {
+    dbHelpers.findUserById(profile, (err, success) => {
       if (err) {
         console.log('routeHelpers -> addUser', err)
       } else {
+        callback(null, success);
+      }
+    })
+  },
+
+  getUserProfileByName: function(fullname, callback) {
+    dbHelpers.findUserByName(fullname, (err, success) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        console.log('findUserByName success: ', success);
         callback(null, success);
       }
     })
