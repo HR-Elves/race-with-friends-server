@@ -47,6 +47,22 @@ app.get('/search/name/:name', function(req, res) {
   })
 })
 
+app.get('/addfriend/:userId/add/:friendId', routeHelpers.addFriend);
+
+  // app.get('/addfriend/:userId/add/:friendId', function(req, res) {
+  // console.log(req.params.userId + 'requests to be friends with' + req.params.friendId);
+  // routeHelpers.addFriend(req.params.userId, req.params.friendId, (err, success) => {
+  //   if (err) {
+  //     console.log(err);
+  //     res.status(400).send(err);
+  //     res.end();
+  //   } else {
+  //     res.status(200).send('You are now friends!', success);
+  //     res.end();
+  //   }
+  // })
+
+
 
 // app.post('/users', function(req, res) {
 //   console.log('request body: ', req.body)

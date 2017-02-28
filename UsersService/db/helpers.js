@@ -42,6 +42,22 @@ dbHelpers = {
         callback(null, success);
       }
     })
+  },
+
+  addFriend: function(user_one_id, user_two_id, callback) {
+    var lowerId = user_one_id;
+    var higherId = user_two_id;
+    if (user_one_id > user_two_id) {
+      lowerId = user_two_id;
+      higherId = user_one_id;
+    }
+    connection.query(`insert into relationships (user_one_id, user_two_id) values (`+ lowerId +`,`+ higherId +`);`, (err, success) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, success);
+      }
+    })
   }
 }
 

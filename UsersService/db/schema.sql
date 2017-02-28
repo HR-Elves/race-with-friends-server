@@ -4,8 +4,6 @@ CREATE DATABASE rwfusers;
 
 -- USE rwfusers;
 
--- USE heroku_a82769b4f508eba;
-
 DROP TABLE IF EXISTS  users;
 
 CREATE TABLE users (
@@ -25,13 +23,11 @@ DROP TABLE IF EXISTS relationships;
 
 CREATE TABLE relationships (
   id INTEGER NOT NULL AUTO_INCREMENT,
-  user_one_id INTEGER NOT NULL,
-  user_two_id INTEGER NOT NULL,
-  status INTEGER NOT NULL,
-  action_user_id INTEGER NOT NULL,
+  user_one_id VARCHAR(255) NOT NULL,
+  user_two_id VARCHAR(255) NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE (user_one_id,user_two_id)
+  UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)
 );
 
 

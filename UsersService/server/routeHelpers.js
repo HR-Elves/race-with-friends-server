@@ -27,6 +27,7 @@ var routeHelpers = {
   },
 
   getUserProfileById: function(profile, callback) {
+
     dbHelpers.findUserById(profile, (err, success) => {
       if (err) {
         console.log('routeHelpers -> addUser', err)
@@ -45,7 +46,22 @@ var routeHelpers = {
         callback(null, success);
       }
     })
+  },
+
+  addFriend: function(req, res) {
+    dbHelpers.addFriend(req.params.userId, req.params.friendId, (err, success) => {
+      if (err) {
+        console.log(err);
+        res.status(400).send(err);
+        res.end();
+      } else {
+        console.log('success addFriend', success);
+        res.status(200).send('You are now friends!');
+        res.end();
+      }
+    })
   }
+
 
 }
 
