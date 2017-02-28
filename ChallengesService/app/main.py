@@ -32,8 +32,10 @@ def root():
 @app.route("/challenges/<challengeid>", methods=['GET', 'DELETE'])
 def handle_challenges(challengeid):
     if (request.method == 'GET'):
+        # return handle_get_challenge(request, challengeid)
         return "Reached GET /challenges/<challengeid>"
     elif (request.method == 'DELETE'):
+        # return handle_delete_challange(request, challengeid)
         return "Reached DELETE /challenges/<challengeid>"
 
 #######################################################
@@ -43,6 +45,7 @@ def handle_challenges(challengeid):
 @app.route("/challenges", methods=['GET'])
 def handle_challanges_opponent_lookup():
     if (request.method == 'GET'):
+        # return handle_get_challenge_by_opponent(request)
         return "Reached GET /challenges"
 
 #################################################
@@ -52,8 +55,10 @@ def handle_challanges_opponent_lookup():
 @app.route("/challenges/<challengeid>/opponents", methods=['GET', 'POST'])
 def handle_challenge_opponent_operations(challengeid):
     if (request.method == 'GET'):
+        # return handle_get_challenge_opponents(request, challengeid)
         return "Reached GET /challenges/<challengeid>/opponents"
     elif (request.method == 'POST'):
+        # return handle_add_challenge_opponents(request, challengeid)
         return "Reached POST /challenges/<challengeid>/opponents"
 
 ##################################
@@ -63,8 +68,10 @@ def handle_challenge_opponent_operations(challengeid):
 @app.route("/users/<userid>/challenges", methods=['GET', 'POST', 'DELETE'])
 def handle_user_challenges(userid):
     if (request.method == 'GET'):
+        # return handle_get_user_challenges(request, userid)
         return "Reached GET /users/<userid>/challenges"
     elif (request.method == 'POST'):
+        # return handle_add_new_challenge_by_user(request, userid)
         return "Reached POST /users/<userid>/challenges"
 
 ##################
