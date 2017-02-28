@@ -20,8 +20,6 @@ services:
       - USERDB_PASSWORD=elves
     volumes:
       - ./UsersService/server/config:/home/nodejs/app/config
-    command:
-      - /bin/bash
     depends_on:
       - usersdb
 
