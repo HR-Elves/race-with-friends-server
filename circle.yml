@@ -10,10 +10,11 @@ machine:
 
 test:
   pre:
+    - if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then scp -r $DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/app/UsersService/config/config.js ./UsersService/server/config.js; fi
+    - docker-compose build
     - sudo service postgresql stop
     - sudo service mysql stop
-    - if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then scp -r $DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/app/UsersService/server/config/config.js ./UsersService/server/config; fi
-    - docker-compose up --build -d
+    - docker-compose up -d
 
   override:
     - docker-compose run router npm test
@@ -29,4 +30,4 @@ deployment:
   testStaging:
     branch: RunsService
     commands:
-      - bash deploy.sh      
+      - bash deploy.sh

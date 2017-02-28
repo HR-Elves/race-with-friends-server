@@ -19,9 +19,7 @@ services:
       - USERDB_DATABASE=rwfusers
       - USERDB_PASSWORD=elves
     volumes:
-      - ./UsersService/server/config:/home/nodejs/app/server/config
-    command:
-      - /bin/bash
+      - ./UsersService/server/config:/home/nodejs/app/config
     depends_on:
       - usersdb
 
@@ -56,7 +54,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./runsdb_data:/var/lib/postgresql
+      - ./runsdb_data:/var/lib/postgresql/data
       - ./RunsDB:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_USER=elves
