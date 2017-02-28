@@ -10,31 +10,48 @@ const app = express();
 
 const port = process.env.PORT || 8000;
 
-const request = require('request'); 
+const request = require('request');
 
 
-app.get('/', function (req, res) {
+app.get('/', isAuthenticated, function (req, res) {
   console.log('GET /');
   let statusCheckMessage = '';
 
-  checkRunsService(function(err, data) {
-    if (err) {
-      statusCheckMessage += 'RunsService Error: ' + err.message + '\n |';
-    } else {
-      statusCheckMessage += data + '\n |';
-      checkUsersService(function(err, data) {
-        if (err) {
-          statusCheckMessage += 'UsersService Error: ' + err.message + '\n |';
-        } else {
-          statusCheckMessage += data + '\n |';
-          res.status(200).send(statusCheckMessage);
-          res.end();
-        }
-      });
+  // checkRunsService(function(err, data) {
+  //   if (err) {
+  //     statusCheckMessage += 'RunsService Error: ' + err.message + '\n |';
+  //   } else {
+  //     statusCheckMessage += data + '\n |';
+  //     checkUsersService(function(err, data) {
+  //       if (err) {
+  //         statusCheckMessage += 'UsersService Error: ' + err.message + '\n |';
+  //       } else {
+  //         statusCheckMessage += data + '\n |';
+  //         res.status(200).send(statusCheckMessage);
+  //         res.end();
+  //       }
+  //     });
+  //   }
+  // });
+
+  res.status(200).send('OK!');
+  res.end();
+});
+
+function isAuthenticated(req, res, next) {
+  console.log('Authenticating...', req.query);
+  request({url: 'http://usersservice:5000/auth/' + JSON.stringify(req.query), timeout: 1000}, function (error, response, body) {
+    if (error) {
+      console.log('isAuthenticated ->', error)
+    } else if (response.statusCode === 200) {
+      return next();
+    } else if (response.statusCode === 401) {
+      res.status(400).send(response)
+      res.end();
     }
   });
+}
 
-});
 
 function checkRunsService(callback) {
   console.log('Checking RunsService...');
@@ -48,7 +65,7 @@ function checkRunsService(callback) {
 }
 
 function checkUsersService(callback) {
-  console.log('Checking UsersService...');  
+  console.log('Checking UsersService...');
   request({url: 'http://usersservice:5000', timeout: 1000}, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       callback(null, 'UsersService! Service Says: ' + body);

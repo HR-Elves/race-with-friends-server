@@ -16,13 +16,16 @@ app.get('/', function (req, res) {
 });
 
 app.get('/auth/:token', function(req, res) {
-
-  routeHelpers.verifyToken(req.params.token, (err, success) => {
+  console.log('Users Service -> auth', req.params)
+  routeHelpers.verifyToken(JSON.stringify(req.params), (err, success) => {
     if (err) {
-      console.log(err)
-      res.json(err);
+      console.log('Users Service -> response error', err);
+      res.status(401).send(err);
+      res.end();
     } else {
-      res.json(success);
+      console.log('Users Service -> response success', success);
+      res.status(200).send(success);
+      res.end();
     }
   })
 });

@@ -1,25 +1,29 @@
 var mysql = require('mysql');
 
-var connectionParams = {
+var developmentParams = {
   host: "localhost",
   user: "root",
   password: "",
   database : "rwfusers"
 }
 
-var isProduction = process.env.productionMode;
-
-if (isProduction) {
-  connectionParams.host = "usersdb:3306";
-  connectionParams.user = "root";
-  connectionParams.password = "elves";
+var productionParams = {
+  host: "usersdb",
+  user: "root",
+  password: "elves",
+  database: "rwfusers"
 }
+
+var isDevMode = process.env.devMode;
+var connectionParams;
+
+isDevMode ? connectionParams = developmentParams : connectionParams =  productionParams;
 
 var connection = mysql.createConnection(connectionParams);
 
 connection.connect(function(err){
   if(err){
-    console.log('Error connecting to Db');
+    console.log('Error connecting to Db', err);
     return;
   }
   console.log('Connection established');
