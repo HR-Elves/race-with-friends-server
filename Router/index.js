@@ -39,8 +39,8 @@ app.get('/', isAuthenticated, function (req, res) {
 });
 
 function isAuthenticated(req, res, next) {
-  console.log('Authenticating...', req.query);
-  request({url: 'http://usersservice:5000/auth/' + JSON.stringify(req.query), timeout: 1000}, function (error, response, body) {
+  console.log('Authenticating...', req.query.token);
+  request({url: 'http://usersservice:5000/auth/' + req.query.token, timeout: 1000}, function (error, response, body) {
     if (error) {
       console.log('isAuthenticated ->', error)
     } else if (response.statusCode === 200) {
