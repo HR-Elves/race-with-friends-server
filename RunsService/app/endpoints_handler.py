@@ -94,7 +94,7 @@ def handle_post_user_runs(request, userid):
     new_run.description = run_info.get('description')
     new_run.length = run_info.get('length')
     new_run.duration = run_info.get('duration')
-    new_run.created_on = run_info.get('created_on')
+    new_run.created_on = run_info.get('created')
 
     # add new object and flush the session to obtain the run entry's id
     # hold off on a commit because we want the DB write to include both

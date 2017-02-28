@@ -29,7 +29,7 @@ class Run(db.Model):
             'description' : self.description,
             'length' : self.length,
             'duration' : self.duration,
-            'created_on' : self.created_on,
+            'created' : self.created_on,
             'data' : []
         }
         
