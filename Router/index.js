@@ -18,17 +18,13 @@ const request = require('request');
 // Use the authentication middleware (comment out during integration steps)
 // app.use(isAuthenticated)
 
-app.all('/users/:userid/runs', function (req, res) {
-  proxy.web(req, res, {
-    target: 'http://runsservice:80'
-  });
-});
+const proxyTable = [
+  { action: 'all', route: '/users/:userid/runs', target: 'http://runsservice:80' },
+  { action: 'get', route: '/runs/:runid', target: 'http://runsservice:80' },
+];
 
-app.get('/runs/:runid', function (req, res) {
-  proxy.web(req, res, {
-    target: 'http://runsservice:80'
-  });
-});
+attachProxy(proxyTable);
+
 
 
 
@@ -100,6 +96,20 @@ function checkUsersService(callback) {
   });
 }
 
+// This function attached endpoints to the express server based on proxy table input
+function attachProxy(proxyTable) {
+  proxyTable.forEach(function(proxyEntry) {
+    app[proxyEntry.action](proxyEntry.route, proxyTo(proxyEntry.target));
+  });
+
+  function proxyTo(target) {
+    return function (req, res) {
+      proxy.web(req, res, {
+        target: target
+      });
+    };
+  }
+}
 
 https.createServer(credentials, app).listen(port, function() {
   console.log('Example app listening on port: ', port);
