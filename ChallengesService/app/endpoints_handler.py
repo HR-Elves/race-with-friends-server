@@ -44,22 +44,49 @@ def handle_delete_challange(request, challengeid)
 
     return response
 
-def handle_get_user_challenges(request, userid)
+def handle_get_challenge_by_opponent(request)
     response = Response()
+    opponent = request.args.get('opponent')
+
+    if opponent is None:
+        response.status_code = 400
+        return response
     try:
-        stored_challanges = Challenges.filter_by(challenger_id=userid).all()
+        stored_challenges = Challenge_Opponents.filter_by(opponent_id=userid).all()
     except:
         response.status_code = 404
         return response
 
-   if stored_challanges is None or len(stored_challanges) == 0:
+    if stored_challenges is None or len(stored_challenges) == 0:
+        response.status_code = 404
+    else :
+        response.status
+        response.status_code = 200
+        responseContent = []        
+        response.headers['Content-Type'] = 'application/json'
+        
+        for challenge in stored_challenges:
+            responseContent.append(challenge.as_Dict())
+        response.data = json.dumps(responseContent)
+
+    return response
+
+def handle_get_user_challenges(request, userid)
+    response = Response()
+    try:
+        stored_challenges = Challenges.filter_by(challenger_id=userid).all()
+    except:
+        response.status_code = 404
+        return response
+
+   if stored_challenges is None or len(stored_challenges) == 0:
         response.status_code = 404
     else:
         response.status_code = 200
         responseContent = []        
         response.headers['Content-Type'] = 'application/json'
         
-        for challenge in stored_challanges:
+        for challenge in stored_challenges:
             responseContent.append(challenge.as_Dict())
         response.data = json.dumps(responseContent)
 

@@ -43,8 +43,7 @@ def handle_challenges(challengeid):
 @app.route("/challenges", methods=['GET'])
 def handle_challanges_opponent_lookup():
     if (request.method == 'GET'):
-        # return handle_get_challenge_by_opponent(request)
-        return "Reached GET /challenges"
+        return handle_get_challenge_by_opponent(request)
 
 #################################################
 # Challenge's Opponents (adding and removing)
