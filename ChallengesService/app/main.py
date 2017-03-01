@@ -46,7 +46,7 @@ def handle_challanges_opponent_lookup():
         return handle_get_challenge_by_opponent(request)
 
 #################################################
-# Challenge's Opponents (adding and removing)
+# Challenge's Opponents (adding and retriing)
 #################################################
 
 @app.route("/challenges/<challengeid>/opponents", methods=['GET', 'POST'])
