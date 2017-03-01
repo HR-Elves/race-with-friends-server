@@ -25,29 +25,22 @@ verifyToken = function(token, callback) {
   });
 }
 
-var getUserProfileById = function(profile, callback) {
-  dbHelpers.findUserById(profile, (err, success) => {
+var getUserProfileById = function(req, res) {
+  dbHelpers.findUserById(req.params.id, (err, success) => {
     if (err) {
       console.log('routeHelpers -> addUser', err)
+      res.status(400).send(err);
+      res.end();
     } else {
-      callback(null, success);
+      res.status(200).send(success);
+      res.end();
     }
   })
 }
 
-var getUserProfileByName = function(fullname, callback) {
-  dbHelpers.findUserByName(fullname, (err, success) => {
-    if (err) {
-      callback(err, null);
-    } else {
-      console.log('findUserByName success: ', success);
-      callback(null, success);
-    }
-  })
-}
-
-var addUser = function(req, res) {
-  dbHelpers.addUser(req.body, (err, success) => {
+var getUserProfileByName = function(req, res) {
+  console.log('Searching for user', req.params.name);
+  dbHelpers.findUserByName(req.params.name, (err, success) => {
     if (err) {
       res.status(400).send(err);
       res.end();
@@ -70,6 +63,18 @@ var getAllUsers = function(req, res) {
   })
 }
 
+var addUser = function(req, res) {
+  dbHelpers.addUser(req.body, (err, success) => {
+    if (err) {
+      res.status(400).send(err);
+      res.end();
+    } else {
+      res.status(200).send(success);
+      res.end();
+    }
+  })
+}
+
 var addFriend = function(req, res) {
   dbHelpers.addFriend(req.params.userId, req.params.friendId, (err, success) => {
     if (err) {
@@ -77,7 +82,6 @@ var addFriend = function(req, res) {
       res.status(400).send(err);
       res.end();
     } else {
-      console.log('success addFriend', success);
       res.status(200).send(success);
       res.end();
     }
@@ -90,7 +94,6 @@ var getFriends = function(req, res) {
       res.status(400).send(err);
       res.end();
     } else {
-      console.log('###', success);
       res.status(200).send(success);
       res.end();
     }

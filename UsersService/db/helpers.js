@@ -7,8 +7,9 @@ var addUser = function(profile, callback) {
   console.log('profile in dbHelpers', profile.fb_id);
   var id = JSON.stringify(profile.fb_id);
   var name = JSON.stringify(profile.fullname);
+  var pic = JSON.stringify(profile.pic);
 
-  connection.query(`insert into users (fb_id,fullname)values (`+ id +`,`+ name +`);`, (err, success) => {
+  connection.query(`insert into users (fb_id,fullname,pic)values (`+ id +`,`+ name + `,` + pic + `);`, (err, success) => {
     if (err) {
       console.log('dbHelpers -> addUser', err);
       callback(err, null);
@@ -20,7 +21,6 @@ var addUser = function(profile, callback) {
 }
 
 var findUserById = function(fb_id, callback) {
-  // var id = JSON.stringify(profile.fb_id);
   connection.query(`select * from users where fb_id=` + fb_id + `;`, (err, success) => {
     if (err) {
       console.log('findUserById error', err);
@@ -37,10 +37,13 @@ var findUserById = function(fb_id, callback) {
 var findUserByIdAsync = Promise.promisify(findUserById);
 
 var findUserByName = function(fullname, callback) {
+  console.log('fullname', fullname)
   connection.query(`select * from users where fullname=` + "'" + fullname + "'" + `;`, (err, success) => {
     if (err) {
       console.log('dbHelpers -> findUserByName', err);
       callback(err, null);
+    } else if (!err && success.length === 0) {
+      callback('User not found in DB', null);
     } else {
       console.log('findUserByName DB query success: ', success);
       callback(null, success);
@@ -76,7 +79,7 @@ var getAllUsers = function(callback) {
 }
 
 var addFriend = function(user_one_id, user_two_id, callback) {
-    var lowerId = user_one_id; //need to store lower of two users first to avoid duplicate entries
+  var lowerId = user_one_id; //need to store lower of two users first to avoid duplicate entries
   var higherId = user_two_id;
   if (user_one_id > user_two_id) {
     lowerId = user_two_id;
@@ -104,7 +107,7 @@ var getFriends = function(fb_id, callback) {
       console.log('dbHelpers -> getFriends', err);
       callback(err, null);
     } else {
-      // callback(null, success);
+      fb_id = JSON.parse(fb_id);
       parseFriends(success, fb_id, callback);
     }
   })

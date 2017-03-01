@@ -32,41 +32,15 @@ app.get('/auth/:token', function(req, res) {
   })
 });
 
-app.get('/search/name/:name', function(req, res) {
-  console.log('Searching for user', req.params.name);
-  routeHelpers.getUserProfileByName(req.params.name, (err, success) => {
-    if (err) {
-      console.log(err);
-      res.status(400).send(err);
-      res.end();
-    } else if (success.length === 0) {
-      res.status(400).send('User not found');
-      res.end();
-    } else {
-      res.status(200).send(success);
-      res.end();
-    }
-  })
-})
-
-app.get('/friends/all/:userId', routeHelpers.getFriends);
-app.get('/users/all', routeHelpers.getAllUsers);
-app.get('/addfriend/:userId/add/:friendId', routeHelpers.addFriend);
-
 app.post('/adduser', routeHelpers.addUser);
 
+app.get('/search/name/:name', routeHelpers.getUserProfileByName);
+app.get('/search/id/:id', routeHelpers.getUserProfileById);
+app.get('/users/all', routeHelpers.getAllUsers);
 
-// app.post('/users', function(req, res) {
-//   console.log('request body: ', req.body)
-//   routeHelpers.getUserProfileById(req.body, (err, success) => {
-//     if (err) {
-//       res.statusCode(401);
-//     } else {
-//       res.send(success);
-//     }
-//   })
-// });
 
+app.get('/addfriend/:userId/add/:friendId', routeHelpers.addFriend);
+app.get('/friends/all/:userId', routeHelpers.getFriends);
 
 
 //TODO:figure out which endpoint makes more sense. this performs same as above endpoint
@@ -79,22 +53,6 @@ app.post('/adduser', routeHelpers.addUser);
 //     } else {
 //       res.send(success);
 //     }
-//   })
-// });
-
-// app.get('/friends/:id', function(req, res) {
-
-// });
-
-// app.post('/signup', function(req, res) {
-//   routeHelpers.addUser(req.body, (err, response) => {
-//     res.send(response);
-//   })
-// });
-
-// app.post('/signin', function(req, res) {
-//   routeHelpers.verifyToken(req.body, response => {
-//     res.send(response)
 //   })
 // });
 
