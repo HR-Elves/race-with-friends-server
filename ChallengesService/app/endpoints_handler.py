@@ -109,9 +109,13 @@ def handle_add_challenge_opponents(request, challengeid):
         response.status_code = 404
     else:
         response.status_code = 200
-        retrieved_challenge.opponents.append(new_opponent_id)
 
-        db.session.add(retrieved_challenge)
+        challenge_opponents = Challenge_Opponents()
+        challenge_opponents.challenge_id = retrieved_challenge.id
+        challenge_opponents.opponent_id = new_opponent_id
+        challenge_opponents.issue_date = retrieved_challenge.created
+
+        db.session.add(challenge_opponents)
         db.session.commit()
 
         response.status_code = 200
@@ -152,7 +156,7 @@ def handle_add_new_challenge_by_user(request, userid):
     new_challenge = Challenge()
 
     new_challenge.run_id = challenge_info.get('runid')
-    new_challenge.challenger_id = challenge_info.get('challengerid')
+    new_challenge.challenger_id = userid
     new_challenge.name = challenge_info.get('name')
     new_challenge.description = challenge_info.get('description')
     new_challenge.created = challenge_info.get('created')
