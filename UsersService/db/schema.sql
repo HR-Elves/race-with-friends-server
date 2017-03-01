@@ -11,6 +11,7 @@ CREATE TABLE users (
   fb_id VARCHAR(255) NOT NULL,
   fullname MEDIUMTEXT NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  pic VARCHAR(255) NOT NULL,
   UNIQUE (fb_id),
   PRIMARY KEY (id)
 );
@@ -30,6 +31,13 @@ CREATE TABLE relationships (
   PRIMARY KEY (id),
   UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)
 );
+
+
+-- insert into users (fb_id,fullname)values ('1','nick');
+-- insert into users (fb_id,fullname)values ('2','james');
+-- insert into users (fb_id,fullname)values ('3','stephen');
+-- insert into users (fb_id,fullname)values ('4','derrick');
+-- insert into users (fb_id,fullname)values ('5','jesus');
 
 
 

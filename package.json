@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "bash start.sh",    
+    "start": "bash start.sh",
     "test": "bash test.sh"
   },
   "repository": {
@@ -16,5 +16,6 @@
   "bugs": {
     "url": "https://github.com/sscchan/dockertest/issues"
   },
-  "homepage": "https://github.com/sscchan/dockertest#readme"
+  "homepage": "https://github.com/sscchan/dockertest#readme",
+  "dependencies": {}
 }
