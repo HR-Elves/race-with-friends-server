@@ -31,6 +31,5 @@ deployment:
     branch: 
       - RunsService
       - Router
-      - ChallengesService
     commands:
       - bash deploy.sh
