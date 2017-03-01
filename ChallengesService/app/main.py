@@ -52,11 +52,9 @@ def handle_challanges_opponent_lookup():
 @app.route("/challenges/<challengeid>/opponents", methods=['GET', 'POST'])
 def handle_challenge_opponent_operations(challengeid):
     if (request.method == 'GET'):
-        # return handle_get_challenge_opponents(request, challengeid)
-        return "Reached GET /challenges/<challengeid>/opponents"
+        return handle_get_challenge_opponents(request, challengeid)
     elif (request.method == 'POST'):
-        # return handle_add_challenge_opponents(request, challengeid)
-        return "Reached POST /challenges/<challengeid>/opponents"
+        return handle_add_challenge_opponents(request, challengeid)
 
 ##################################
 # User's Challenges (with userid)

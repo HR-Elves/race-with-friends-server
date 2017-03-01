@@ -71,6 +71,54 @@ def handle_get_challenge_by_opponent(request)
 
     return response
 
+
+def handle_get_challenge_opponents(request, challengeid):
+    response = Response()
+    try:
+        retrieved_challenge = Challenge.query.get(challengeid)
+    except:
+        response.status_code = 404
+        return response    
+
+    if retrieved_challenge is None:
+        response.status_code = 404
+    else:
+        challenge_Dict = retrieved_challenge.as_Dict()
+
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+        response.data = json.dumps(challenge_Dict.get('opponents'))
+
+    return response
+
+def handle_add_challenge_opponents(request, challengeid):
+    response = Response()
+
+    new_opponent_id = request.get_json().get('opponent_id')
+    if new_opponent_id is None:
+        response.status_code = 400
+        return response
+
+    try:
+        retrieved_challenge = Challenge.query.get(challengeid)
+    except:
+        response.status_code = 404
+        return response    
+
+    if retrieved_challenge is None:
+        response.status_code = 404
+    else:
+        response.status_code = 200
+        retrieved_challenge.opponents.append(new_opponent_id)
+
+        db.session.add(retrieved_challenge)
+        db.session.commit()
+        
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+
+    return response
+
 def handle_get_user_challenges(request, userid)
     response = Response()
     try:
@@ -109,8 +157,8 @@ def handle_add_new_challenge_by_user(request, userid)
     new_challenge.description = challenge_info.get('description')
     new_challenge.created = challenge_info.get('created')
 
-    db.session.add(new_challenge);
-    db.session.flush();
+    db.session.add(new_challenge)
+    db.session.flush()
 
     new_challenge_opponents = challenge_info.get('opponents')
         if new_challenge_opponents is not None:
