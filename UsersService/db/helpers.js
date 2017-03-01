@@ -49,17 +49,11 @@ dbHelpers = {
         console.log('verifyTwoUsersExist -> User1 not found', err);
         callback(err, null);
       } else {
-        var users = {};
-        users.user1 = user1;
-        console.log('user1', user1);
         this.findUserById(user_two_id, (err, user2) => {
           if (err) {
             callback(err, null);
           } else {
-            users.user2 = user2;
-            console.log('user2', user2);
-            console.log('users', users);
-            callback(null, users);
+            callback(null, user2);
           }
         })
       }
@@ -73,7 +67,7 @@ dbHelpers = {
       lowerId = user_two_id;
       higherId = user_one_id;
     }
-    this.verifyTwoUsersExist(user_one_id, user_two_id, (err, success) => {
+    this.verifyTwoUsersExist(user_one_id, user_two_id, (err, friend) => {
       if (err) {
         callback(err);
       } else {
@@ -81,7 +75,7 @@ dbHelpers = {
           if (err) {
             callback(err, null);
           } else {
-            callback(null, success);
+            callback(null, friend);
           }
         })
       }
