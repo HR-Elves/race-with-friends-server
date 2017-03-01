@@ -66,8 +66,7 @@ def handle_challenge_opponent_operations(challengeid):
 @app.route("/users/<userid>/challenges", methods=['GET', 'POST', 'DELETE'])
 def handle_user_challenges(userid):
     if (request.method == 'GET'):
-        # return handle_get_user_challenges(request, userid)
-        return "Reached GET /users/<userid>/challenges"
+        return handle_get_user_challenges(request, userid)
     elif (request.method == 'POST'):
         return handle_add_new_challenge_by_user(request, userid)
 
