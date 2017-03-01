@@ -69,7 +69,7 @@ def handle_get_user_runs(request, userid):
         response.status_code = 404
         return response
 
-    if user_runs is None or len(user_runs) == 0:
+    if user_runs is None:
         response.status_code = 404
     else:
         response.status_code = 200
