@@ -16,18 +16,17 @@ dbHelpers = {
     })
   },
 
-  findUserById: function(profile, callback) {
-    var id = JSON.stringify(profile.fb_id);
-    connection.query(`select * from users where fb_id=` + id + `;`, (err, success) => {
+  findUserById: function(fb_id, callback) {
+    // var id = JSON.stringify(profile.fb_id);
+    connection.query(`select * from users where fb_id=` + fb_id + `;`, (err, success) => {
       if (err) {
-        console.log('dbHelpers -> findUser', err)
+        console.log('findUserById error', err);
+        callback(err, null);
+      } else if (!err && success.length === 0) {
+        callback('User not found in DB', null);
       } else {
-        if (success.length === 0) {
-          this.addUser(profile, callback);
-        } else {
-          console.log('User already exists in DB');
-          callback(null, 'User already exists in DB');
-        }
+        console.log('User found', success);
+        callback(null, success);
       }
     })
   },
@@ -44,21 +43,52 @@ dbHelpers = {
     })
   },
 
+  verifyTwoUsersExist: function(user_one_id, user_two_id, callback) {
+    this.findUserById(user_one_id, (err, user1) => {
+      if (err) {
+        console.log('verifyTwoUsersExist -> User1 not found', err);
+        callback(err, null);
+      } else {
+        var users = {};
+        users.user1 = user1;
+        console.log('user1', user1);
+        this.findUserById(user_two_id, (err, user2) => {
+          if (err) {
+            callback(err, null);
+          } else {
+            users.user2 = user2;
+            console.log('user2', user2);
+            console.log('users', users);
+            callback(null, users);
+          }
+        })
+      }
+    })
+  },
+
   addFriend: function(user_one_id, user_two_id, callback) {
-    var lowerId = user_one_id;
+    var lowerId = user_one_id; //need to store lower of two users first to avoid duplicate entries
     var higherId = user_two_id;
     if (user_one_id > user_two_id) {
       lowerId = user_two_id;
       higherId = user_one_id;
     }
-    connection.query(`insert into relationships (user_one_id, user_two_id) values (`+ lowerId +`,`+ higherId +`);`, (err, success) => {
+    this.verifyTwoUsersExist(user_one_id, user_two_id, (err, success) => {
       if (err) {
-        callback(err, null);
+        callback(err);
       } else {
-        callback(null, success);
+        connection.query(`insert into relationships (user_one_id, user_two_id) values (`+ lowerId +`,`+ higherId +`);`, (err, success) => {
+          if (err) {
+            callback(err, null);
+          } else {
+            callback(null, success);
+          }
+        })
       }
     })
   }
+
+
 }
 
 

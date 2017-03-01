@@ -48,6 +48,8 @@ var routeHelpers = {
     })
   },
 
+
+
   addFriend: function(req, res) {
     dbHelpers.addFriend(req.params.userId, req.params.friendId, (err, success) => {
       if (err) {
