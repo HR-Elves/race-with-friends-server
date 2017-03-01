@@ -49,6 +49,7 @@ app.get('/search/name/:name', function(req, res) {
   })
 })
 
+app.get('/friends/all/:userId', routeHelpers.getFriends);
 app.get('/users/all', routeHelpers.getAllUsers);
 app.get('/addfriend/:userId/add/:friendId', routeHelpers.addFriend);
 

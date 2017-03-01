@@ -83,6 +83,18 @@ var routeHelpers = {
         res.end();
       }
     })
+  },
+
+  getFriends: function(req, res) {
+    dbHelpers.getFriends(req.params.userId, (err, success) => {
+      if (err) {
+        res.status(400).send(err);
+        res.end();
+      } else {
+        res.status(200).send(success);
+        res.end();
+      }
+    })
   }
 
 

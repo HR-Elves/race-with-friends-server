@@ -91,6 +91,18 @@ dbHelpers = {
         })
       }
     })
+  },
+
+  getFriends: function(fb_id, callback) {
+    fb_id = JSON.stringify(fb_id);
+    connection.query(`select * from relationships WHERE (user_one_id = ` + fb_id + ` OR user_two_id = ` + fb_id + `);`, (err, success) => {
+      if (err) {
+        console.log('dbHelpers -> getFriends', err);
+        callback(err, null);
+      } else {
+        callback(null, success);
+      }
+    })
   }
 
 
