@@ -26,7 +26,7 @@ def handle_get_challenge(request, challengeid):
 
     return response
 
-def handle_delete_challange(request, challengeid)
+def handle_delete_challange(request, challengeid):
     response = Response()
 
     try:
@@ -44,7 +44,7 @@ def handle_delete_challange(request, challengeid)
 
     return response
 
-def handle_get_challenge_by_opponent(request)
+def handle_get_challenge_by_opponent(request):
     response = Response()
     opponent = request.args.get('opponent')
 
@@ -113,13 +113,13 @@ def handle_add_challenge_opponents(request, challengeid):
 
         db.session.add(retrieved_challenge)
         db.session.commit()
-        
+
         response.status_code = 200
         response.headers['Content-Type'] = 'application/json'
 
     return response
 
-def handle_get_user_challenges(request, userid)
+def handle_get_user_challenges(request, userid):
     response = Response()
     try:
         stored_challenges = Challenges.filter_by(challenger_id=userid).all()
@@ -127,7 +127,7 @@ def handle_get_user_challenges(request, userid)
         response.status_code = 404
         return response
 
-   if stored_challenges is None or len(stored_challenges) == 0:
+    if stored_challenges is None or len(stored_challenges) == 0:
         response.status_code = 404
     else:
         response.status_code = 200
@@ -140,7 +140,7 @@ def handle_get_user_challenges(request, userid)
 
     return response
 
-def handle_add_new_challenge_by_user(request, userid)
+def handle_add_new_challenge_by_user(request, userid):
     response = Response()
     challenge_info = request.get_json()
 
@@ -161,14 +161,15 @@ def handle_add_new_challenge_by_user(request, userid)
     db.session.flush()
 
     new_challenge_opponents = challenge_info.get('opponents')
-        if new_challenge_opponents is not None:
-            for opponent in new_challenge_opponents:
-                new_opponent = Challenge_Opponents()
-                new_opponent.challenge_id = new_challenge.id
-                new_opponent.opponent_id = opponent
-                issue_date = new_challenge.created
+    
+    if new_challenge_opponents is not None:
+        for opponent in new_challenge_opponents:
+            new_opponent = Challenge_Opponents()
+            new_opponent.challenge_id = new_challenge.id
+            new_opponent.opponent_id = opponent
+            issue_date = new_challenge.created
 
-                db.session.add(new_opponent)              
+            db.session.add(new_opponent)              
 
     db.session.commit()
     responseContent = {'id': new_challenge.id}

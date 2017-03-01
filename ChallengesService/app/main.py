@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://elves:elves@runsdb:5432/rwfruns'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True      
 
-from dbmodels import db, Run, DataPoint
+from dbmodels import db, Challenge, Challenge_Opponents
 from endpoints_handler import *
 
 
