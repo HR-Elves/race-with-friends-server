@@ -58,6 +58,7 @@ var verifyTwoUsersExist = function(user_one_id, user_two_id, callback) {
     } else {
       findUserById(user_two_id, (err, user2) => {
         if (err) {
+          console.log('verifyTwoUsersExist -> User2 not found', err)
           callback(err, null);
         } else {
           callback(null, user2);

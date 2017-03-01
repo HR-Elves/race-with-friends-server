@@ -99,14 +99,3 @@ exports.getFriends = function(req, res) {
     }
   })
 }
-
-
-// module.exports.parseTokenError = parseTokenError;
-// module.exports.verifyToken = verifyToken;
-// module.exports.getUserProfileById = getUserProfileById;
-// module.exports.getUserProfileByName = getUserProfileByName;
-// module.exports.getUserProfileByName = getUserProfileByName;
-// module.exports.addUser = addUser;
-// module.exports.getAllUsers = getAllUsers;
-// module.exports.addFriend = addFriend;
-// module.exports.getFriends = getFriends;

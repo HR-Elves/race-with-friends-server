@@ -6,7 +6,7 @@ var certificate = fs.readFileSync('/etc/letsencrypt/live/www.racewithfriends.tk/
 var credentials = {key: privateKey, cert: certificate};
 
 const httpProxy = require('http-proxy');
-const proxy = httpProxy.createProxy(); 
+const proxy = httpProxy.createProxy();
 
 const express = require('express');
 const app = express();
@@ -21,6 +21,12 @@ const request = require('request');
 const proxyTable = [
   { action: 'all', route: '/users/:userid/runs', target: 'http://runsservice:80' },
   { action: 'get', route: '/runs/:runid', target: 'http://runsservice:80' },
+  { action: 'post', route: '/adduser', target: 'http://usersservice:5000' },
+  { action: 'post', route: '/addfriend', target: 'http://usersservice:5000' },
+  { action: 'get', route: '/search/name/:name', target: 'http://usersservice:5000' },
+  { action: 'get', route: '/search/id/:id', target: 'http://usersservice:5000' },
+  { action: 'get', route: '/users/all', target: 'http://usersservice:5000' },
+  { action: 'get', route: '/friends/all/:userId', target: 'http://usersservice:5000' }
 ];
 
 attachProxy(proxyTable);
@@ -31,7 +37,7 @@ attachProxy(proxyTable);
 // app.use('/user/:id', function (req, res, next) {
 //   console.log('Request Type:', req.method);
 //   next();
-// }); 
+// });
 
 
 app.get('/', isAuthenticated, function (req, res) {

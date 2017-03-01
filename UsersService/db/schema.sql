@@ -7,14 +7,21 @@ CREATE DATABASE rwfusers;
 DROP TABLE IF EXISTS  users;
 
 CREATE TABLE users (
-  id INTEGER NOT NULL AUTO_INCREMENT,
   fb_id VARCHAR(255) NOT NULL,
   fullname MEDIUMTEXT NOT NULL,
-  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   pic VARCHAR(255) NOT NULL,
-  UNIQUE (fb_id),
-  PRIMARY KEY (id)
+  UNIQUE (fb_id)
 );
+-- CREATE TABLE users (
+--   id INTEGER NOT NULL AUTO_INCREMENT,
+--   fb_id VARCHAR(255) NOT NULL,
+--   fullname MEDIUMTEXT NOT NULL,
+--   createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--   pic VARCHAR(255) NOT NULL,
+--   UNIQUE (fb_id),
+--   PRIMARY KEY (id)
+-- );
+
 
 -- ---
 -- Table relationships
@@ -24,13 +31,19 @@ CREATE TABLE users (
 DROP TABLE IF EXISTS relationships;
 
 CREATE TABLE relationships (
-  id INTEGER NOT NULL AUTO_INCREMENT,
   user_one_id VARCHAR(255) NOT NULL,
   user_two_id VARCHAR(255) NOT NULL,
-  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
   UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)
 );
+
+-- CREATE TABLE relationships (
+--   id INTEGER NOT NULL AUTO_INCREMENT,
+--   user_one_id VARCHAR(255) NOT NULL,
+--   user_two_id VARCHAR(255) NOT NULL,
+--   createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--   PRIMARY KEY (id),
+--   UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)
+-- );
 
 
 -- insert into users (fb_id,fullname)values ('1','nick');
