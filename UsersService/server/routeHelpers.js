@@ -47,7 +47,29 @@ var routeHelpers = {
     })
   },
 
+  addUser: function(req, res) {
+    dbHelpers.addUser(req.body, (err, success) => {
+      if (err) {
+        res.status(400).send(err);
+        res.end();
+      } else {
+        res.status(200).send(success);
+        res.end();
+      }
+    })
+  },
 
+  getAllUsers: function(req, res) {
+    dbHelpers.getAllUsers((err, success) => {
+      if (err) {
+        res.status(500).send(err);
+        res.end();
+      } else {
+        res.status(200).send(success);
+        res.end();
+      }
+    })
+  },
 
   addFriend: function(req, res) {
     dbHelpers.addFriend(req.params.userId, req.params.friendId, (err, success) => {

@@ -8,7 +8,9 @@ const port = process.env.PORT || 5000;
 
 var counter = 0;
 
-// app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 
 app.get('/', function (req, res) {
   res.send('UsersServicesOK! - Counter is: ' + counter);
@@ -47,21 +49,10 @@ app.get('/search/name/:name', function(req, res) {
   })
 })
 
+app.get('/users/all', routeHelpers.getAllUsers);
 app.get('/addfriend/:userId/add/:friendId', routeHelpers.addFriend);
 
-  // app.get('/addfriend/:userId/add/:friendId', function(req, res) {
-  // console.log(req.params.userId + 'requests to be friends with' + req.params.friendId);
-  // routeHelpers.addFriend(req.params.userId, req.params.friendId, (err, success) => {
-  //   if (err) {
-  //     console.log(err);
-  //     res.status(400).send(err);
-  //     res.end();
-  //   } else {
-  //     res.status(200).send('You are now friends!', success);
-  //     res.end();
-  //   }
-  // })
-
+app.post('/adduser', routeHelpers.addUser);
 
 
 // app.post('/users', function(req, res) {

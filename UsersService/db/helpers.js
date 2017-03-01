@@ -2,16 +2,17 @@ var connection = require('./db.js');
 
 dbHelpers = {
   addUser: function(profile, callback) {
-    console.log('profile in dbHelpers', JSON.stringify(profile.fb_id))
-    var id = JSON.stringify(profile.fb_id)
-    var name = JSON.stringify(profile.fullname)
+    console.log('profile in dbHelpers', profile.fb_id);
+    var id = JSON.stringify(profile.fb_id);
+    var name = JSON.stringify(profile.fullname);
 
     connection.query(`insert into users (fb_id,fullname)values (`+ id +`,`+ name +`);`, (err, success) => {
       if (err) {
-        console.log('dbHelpers -> addUser', err)
+        console.log('dbHelpers -> addUser', err);
+        callback(err, null);
       } else {
-        console.log('User successfully added to DB', success)
-        callback(null, 'User successfully added to DB')
+        console.log('User successfully added to DB', success);
+        callback(null, success);
       }
     })
   },
@@ -56,6 +57,16 @@ dbHelpers = {
             callback(null, user2);
           }
         })
+      }
+    })
+  },
+
+  getAllUsers: function(callback) {
+    connection.query(`select fb_id,fullname from users;`, (err, success) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, success);
       }
     })
   },
