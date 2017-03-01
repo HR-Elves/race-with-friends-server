@@ -5,12 +5,37 @@ var certificate = fs.readFileSync('/etc/letsencrypt/live/www.racewithfriends.tk/
 
 var credentials = {key: privateKey, cert: certificate};
 
+const httpProxy = require('http-proxy');
+const proxy = httpProxy.createProxy(); 
+
 const express = require('express');
 const app = express();
 
 const port = process.env.PORT || 8000;
 
 const request = require('request');
+
+// Use the authentication middleware (comment out during integration steps)
+// app.use(isAuthenticated)
+
+app.all('/users/:userid/runs', function (req, res) {
+  proxy.web(req, res, {
+    target: 'http://runsservice:80'
+  });
+});
+
+app.get('/runs/:runid', function (req, res) {
+  proxy.web(req, res, {
+    target: 'http://runsservice:80'
+  });
+});
+
+
+
+// app.use('/user/:id', function (req, res, next) {
+//   console.log('Request Type:', req.method);
+//   next();
+// }); 
 
 
 app.get('/', isAuthenticated, function (req, res) {
