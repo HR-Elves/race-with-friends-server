@@ -32,6 +32,13 @@ CREATE TABLE relationships (
 );
 
 
+-- insert into users (fb_id,fullname)values ('1','nick');
+-- insert into users (fb_id,fullname)values ('2','james');
+-- insert into users (fb_id,fullname)values ('3','stephen');
+-- insert into users (fb_id,fullname)values ('4','derrick');
+-- insert into users (fb_id,fullname)values ('5','jesus');
+
+
 
 
 
