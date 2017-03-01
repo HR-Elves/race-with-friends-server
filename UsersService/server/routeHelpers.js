@@ -5,7 +5,7 @@ var secret = require('../config/config.js');
 var dbHelpers = require('../db/helpers.js');
 
 
-var parseTokenError = function(err, token, callback) {
+exports.parseTokenError = function(err, token, callback) {
   if (err.message === "jwt expired" || err.message === "invalid token") {
     callback({isValid: false});
   } else {
@@ -13,7 +13,7 @@ var parseTokenError = function(err, token, callback) {
   }
 }
 
-verifyToken = function(token, callback) {
+exports.verifyToken = function(token, callback) {
   jwt.verify(token, secret, (err, success) => {
     if (err) {
       console.log('routeHelpers -> verifyToken', err);
@@ -25,7 +25,7 @@ verifyToken = function(token, callback) {
   });
 }
 
-var getUserProfileById = function(req, res) {
+exports.getUserProfileById = function(req, res) {
   dbHelpers.findUserById(req.params.id, (err, success) => {
     if (err) {
       console.log('routeHelpers -> addUser', err)
@@ -38,7 +38,7 @@ var getUserProfileById = function(req, res) {
   })
 }
 
-var getUserProfileByName = function(req, res) {
+exports.getUserProfileByName = function(req, res) {
   console.log('Searching for user', req.params.name);
   dbHelpers.findUserByName(req.params.name, (err, success) => {
     if (err) {
@@ -51,7 +51,7 @@ var getUserProfileByName = function(req, res) {
   })
 }
 
-var getAllUsers = function(req, res) {
+exports.getAllUsers = function(req, res) {
   dbHelpers.getAllUsers((err, success) => {
     if (err) {
       res.status(500).send(err);
@@ -63,20 +63,20 @@ var getAllUsers = function(req, res) {
   })
 }
 
-var addUser = function(req, res) {
+exports.addUser = function(req, res) {
   dbHelpers.addUser(req.body, (err, success) => {
     if (err) {
       res.status(400).send(err);
       res.end();
     } else {
-      res.status(200).send(success);
+      res.status(200).send();
       res.end();
     }
   })
 }
 
-var addFriend = function(req, res) {
-  dbHelpers.addFriend(req.params.userId, req.params.friendId, (err, success) => {
+exports.addFriend = function(req, res) {
+  dbHelpers.addFriend(req.body.userId, req.body.friendId, (err, success) => {
     if (err) {
       console.log(err);
       res.status(400).send(err);
@@ -88,7 +88,7 @@ var addFriend = function(req, res) {
   })
 }
 
-var getFriends = function(req, res) {
+exports.getFriends = function(req, res) {
   dbHelpers.getFriends(req.params.userId, (err, success) => {
     if (err) {
       res.status(400).send(err);
@@ -101,12 +101,12 @@ var getFriends = function(req, res) {
 }
 
 
-module.exports.parseTokenError = parseTokenError;
-module.exports.verifyToken = verifyToken;
-module.exports.getUserProfileById = getUserProfileById;
-module.exports.getUserProfileByName = getUserProfileByName;
-module.exports.getUserProfileByName = getUserProfileByName;
-module.exports.addUser = addUser;
-module.exports.getAllUsers = getAllUsers;
-module.exports.addFriend = addFriend;
-module.exports.getFriends = getFriends;
+// module.exports.parseTokenError = parseTokenError;
+// module.exports.verifyToken = verifyToken;
+// module.exports.getUserProfileById = getUserProfileById;
+// module.exports.getUserProfileByName = getUserProfileByName;
+// module.exports.getUserProfileByName = getUserProfileByName;
+// module.exports.addUser = addUser;
+// module.exports.getAllUsers = getAllUsers;
+// module.exports.addFriend = addFriend;
+// module.exports.getFriends = getFriends;

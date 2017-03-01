@@ -1,7 +1,6 @@
 var connection = require('./db.js');
 var Promise = require("bluebird");
 
-// module.exports.dbHelpers = {};
 
 var addUser = function(profile, callback) {
   console.log('profile in dbHelpers', profile.fb_id);
@@ -69,7 +68,7 @@ var verifyTwoUsersExist = function(user_one_id, user_two_id, callback) {
 }
 
 var getAllUsers = function(callback) {
-  connection.query(`select fb_id,fullname from users;`, (err, success) => {
+  connection.query(`select fb_id,fullname,pic from users;`, (err, success) => {
     if (err) {
       callback(err, null);
     } else {

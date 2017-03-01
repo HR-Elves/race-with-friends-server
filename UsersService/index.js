@@ -33,28 +33,13 @@ app.get('/auth/:token', function(req, res) {
 });
 
 app.post('/adduser', routeHelpers.addUser);
+app.post('/addfriend', routeHelpers.addFriend);
 
 app.get('/search/name/:name', routeHelpers.getUserProfileByName);
 app.get('/search/id/:id', routeHelpers.getUserProfileById);
 app.get('/users/all', routeHelpers.getAllUsers);
-
-
-app.get('/addfriend/:userId/add/:friendId', routeHelpers.addFriend);
 app.get('/friends/all/:userId', routeHelpers.getFriends);
 
-
-//TODO:figure out which endpoint makes more sense. this performs same as above endpoint
-// app.post('/auth', function(req, res) {
-//   console.log(req.body.id_token)
-//   // res.send(req.body)
-//   routeHelpers.verifyToken(req.body.id_token, (err, success) => {
-//     if (err) {
-//       res.send(401);
-//     } else {
-//       res.send(success);
-//     }
-//   })
-// });
 
 app.listen(port, function() {
   console.log('Users Management Service listening on port: ', port);
