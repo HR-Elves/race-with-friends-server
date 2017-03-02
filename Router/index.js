@@ -19,8 +19,23 @@ const request = require('request');
 // app.use(isAuthenticated)
 
 const proxyTable = [
-  { action: 'all', route: '/users/:userid/runs', target: 'http://runsservice:80' },
+  { action: 'get', route: '/users/:userid/runs', target: 'http://runsservice:80' },
+  { action: 'post', route: '/users/:userid/runs', target: 'http://runsservice:80' },  
   { action: 'get', route: '/runs/:runid', target: 'http://runsservice:80' },
+  { action: 'delete', route: '/runs/:runid', target: 'http://runsservice:80' },
+  { action: 'get', route: '/users/:userid/runs/:runid', target: 'http://runsservice:80' },
+  { action: 'delete', route: '/users/:userid/runs/:runid', target: 'http://runsservice:80' },
+  
+  { action: 'get', route: '/challenges', target: 'http://challengesservice:80' },  
+  { action: 'get', route: '/challenges/:challengeid', target: 'http://challengesservice:80' },
+  { action: 'delete', route: '/challenges/:challengeid', target: 'http://challengesservice:80' },
+  { action: 'get', route: '/challenges/:challengeid/opponents', target: 'http://challengesservice:80' },
+  { action: 'post', route: '/challenges/:challengeid/opponents', target: 'http://challengesservice:80' },
+  { action: 'delete', route: '/challenges/:challengeid/opponents', target: 'http://challengesservice:80' },
+  { action: 'delete', route: '/challenges/:challengeid/opponents/:opponentid', target: 'http://challengesservice:80' },
+  { action: 'get', route: '/users/:userid/challenges', target: 'http://challengesservice:80' },
+  { action: 'post', route: '/users/:userid/challenges', target: 'http://challengesservice:80' },      
+    
   { action: 'post', route: '/adduser', target: 'http://usersservice:5000' },
   { action: 'post', route: '/addfriend', target: 'http://usersservice:5000' },
   { action: 'get', route: '/search/name/:name', target: 'http://usersservice:5000' },
