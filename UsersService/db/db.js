@@ -21,18 +21,18 @@ isDevMode ? connectionParams = developmentParams : connectionParams =  productio
 
 var connection = mysql.createConnection(connectionParams);
 
-connection.connect(function(err){
+connection.connect(err => {
   if(err){
-    console.log('Error connecting to Db', err);
+    console.log('Error connecting to DB', err);
     return;
   }
   console.log('Connection established');
 });
 
-// db.end(function(err) {
-//   // The connection is terminated gracefully
-//   // Ensures all previously enqueued queries are still
-//   // before sending a COM_QUIT packet to the MySQL server.
-// });
+connection.on('error', function(err) {
+  if (err.fatal) {
+    connection.connect();
+  }
+});
 
 module.exports = connection;
