@@ -36,9 +36,14 @@ class Challenge(db.Model):
         response = requests.get('http://runsservice:80/runs/%s' %self.run_id)
         if response.status_code == 200:
             response_data = response.json()
-            selfAsDict['challenger_name'] = response_data.get('name')
             selfAsDict['distanceTotal'] = response_data.get('length')
             selfAsDict['timeTotal'] = response_data.get('duration')
+            user_id = response_data.get('user_id')
+
+            response = requests.get('http://usersservice:5000/search/id/%s' %user_id)
+            if response.status_code == 200:            
+                response_data = response.json()
+                selfAsDict['challenger_name'] = response_data.get('fullname')
 
         return selfAsDict
 
