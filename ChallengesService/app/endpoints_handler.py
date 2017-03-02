@@ -250,6 +250,7 @@ def handle_add_new_challenge_by_user(request, userid):
     new_challenge.challenger_id = userid
     new_challenge.name = challenge_info.get('name')
     new_challenge.description = challenge_info.get('description')
+    new_challenge.message = challenge_info.get('message')    
     new_challenge.created = challenge_info.get('created')
 
     db.session.add(new_challenge)
