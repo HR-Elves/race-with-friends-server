@@ -6,7 +6,7 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   docker tag racewithfriendsserver_router:latest hr52elves/router:latest
   docker tag racewithfriendsserver_runsservice:latest hr52elves/runsservice:latest
   docker tag racewithfriendsserver_usersservice:latest hr52elves/usersservice:latest
-  docker tag racewithfriendsserver_challengesservice:latest hr52elves/usersservice:latest  
+  docker tag racewithfriendsserver_challengesservice:latest hr52elves/challengesservice:latest  
 
   # Login to Docker Hub
   docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
@@ -15,6 +15,7 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   docker push hr52elves/router:latest
   docker push hr52elves/runsservice:latest
   docker push hr52elves/usersservice:latest
+  docker push hr52elves/challengesservice:latest
 
   echo "stopping running application"
   ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker-compose down;'

@@ -32,5 +32,6 @@ deployment:
     branch: 
       - RunsService
       - Router
+      - CI
     commands:
       - bash deploy.sh

@@ -46,7 +46,7 @@ services:
       - runsdb
 
   challengesservice:
-    build: hr52elves/challengesservice:latest
+    image: hr52elves/challengesservice:latest
     ports:
       - "5001:80"
     depends_on:
