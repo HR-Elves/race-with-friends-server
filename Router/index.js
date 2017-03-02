@@ -132,10 +132,19 @@ function attachProxy(proxyTable) {
   }
 }
 
-https.createServer(credentials, app).listen(port, function() {
+const httpsServer = https.createServer(credentials, app).listen(port, function() {
   console.log('Example app listening on port: ', port);
 });
 
-// app.listen(port, function() {
-//   console.log('Example app listening on port: ', port);
-// });
+const WebSocketServer = require('ws').Server;
+var wss = new WebSocketServer({
+  server: httpsServer
+});
+
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+  });
+
+  ws.send('something');
+});
