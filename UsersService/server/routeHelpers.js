@@ -13,17 +13,30 @@ exports.parseTokenError = function(err, token, callback) {
   }
 }
 
-exports.verifyToken = function(token, callback) {
-  jwt.verify(token, secret, (err, success) => {
+// exports.verifyToken = function(token, callback) {
+//   jwt.verify(token, secret, (err, success) => {
+//     if (err) {
+//       console.log('routeHelpers -> verifyToken', err);
+//       // parseTokenError(err, token, callback);
+//       callback(err);
+//     } else {
+//       callback(null, success);
+//     }
+//   });
+// }
+
+exports.verifyToken = function(req, res) {
+  jwt.verify(req.params.token, secret, (err, success) => {
     if (err) {
-      console.log('routeHelpers -> verifyToken', err);
-      // parseTokenError(err, token, callback);
-      callback(err);
+      res.status(401).send(err);
+      res.end();
     } else {
-      callback(null, success);
+      res.status(200).send(success);
+      res.end();
     }
-  });
+  })
 }
+
 
 exports.getUserProfileById = function(req, res) {
   dbHelpers.findUserById(req.params.id, (err, success) => {

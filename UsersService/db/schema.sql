@@ -4,7 +4,7 @@ CREATE DATABASE rwfusers;
 
 -- USE rwfusers;
 
-DROP TABLE IF EXISTS  users;
+DROP TABLE users;
 
 CREATE TABLE users (
   fb_id VARCHAR(255) NOT NULL,
@@ -12,6 +12,45 @@ CREATE TABLE users (
   pic VARCHAR(255) NOT NULL,
   UNIQUE (fb_id)
 );
+
+-- ---
+-- Table relationships
+--
+-- ---
+
+DROP TABLE relationships;
+
+CREATE TABLE relationships (
+  user_one_id VARCHAR(255) NOT NULL,
+  user_two_id VARCHAR(255) NOT NULL,
+  UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)
+);
+
+-- node mysql version:
+'DROP TABLE users;'
+
+'CREATE TABLE users (' +
+  'fb_id VARCHAR(255) NOT NULL,' +
+  'fullname MEDIUMTEXT NOT NULL,' +
+  'pic VARCHAR(255) NOT NULL,' +
+  'createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
+  'UNIQUE (fb_id)' +
+');'
+
+
+'DROP TABLE relationships;'
+
+'CREATE TABLE relationships (' +
+  'user_one_id VARCHAR(255) NOT NULL,' +
+  'user_two_id VARCHAR(255) NOT NULL,' +
+  'createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,' +
+  'UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)' +
+');'
+
+
+
+
+-- versions with ids and createdAt
 -- CREATE TABLE users (
 --   id INTEGER NOT NULL AUTO_INCREMENT,
 --   fb_id VARCHAR(255) NOT NULL,
@@ -22,19 +61,6 @@ CREATE TABLE users (
 --   PRIMARY KEY (id)
 -- );
 
-
--- ---
--- Table relationships
---
--- ---
-
-DROP TABLE IF EXISTS relationships;
-
-CREATE TABLE relationships (
-  user_one_id VARCHAR(255) NOT NULL,
-  user_two_id VARCHAR(255) NOT NULL,
-  UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)
-);
 
 -- CREATE TABLE relationships (
 --   id INTEGER NOT NULL AUTO_INCREMENT,
