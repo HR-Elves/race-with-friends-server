@@ -127,7 +127,7 @@ def handle_add_challenge_opponents(request, challengeid):
                 challenge_opponents = Challenge_Opponents()
                 challenge_opponents.challenge_id = retrieved_challenge.id
                 challenge_opponents.opponent_id = new_opponent_id
-                challenge_opponents.issue_date = retrieved_challenge.created
+                challenge_opponents.issue_date = retrieved_challenge.created_on
                 db.session.add(challenge_opponents)
 
         db.session.commit()
@@ -179,7 +179,7 @@ def handle_add_challenge_opponent(request, challengeid, opponentid):
         challenge_opponents = Challenge_Opponents(opponent_id=opponent_id)
         challenge_opponents.challenge_id = retrieved_challenge.id
         challenge_opponents.opponent_id = opponentid
-        challenge_opponents.issue_date = retrieved_challenge.created
+        challenge_opponents.issue_date = retrieved_challenge.created_on
         db.session.add(challenge_opponents)
         db.session.commit()
 
@@ -246,12 +246,12 @@ def handle_add_new_challenge_by_user(request, userid):
 
     new_challenge = Challenge()
 
-    new_challenge.run_id = challenge_info.get('runid')
+    new_challenge.run_id = challenge_info.get('run_id')
     new_challenge.challenger_id = userid
     new_challenge.name = challenge_info.get('name')
     new_challenge.description = challenge_info.get('description')
     new_challenge.message = challenge_info.get('message')    
-    new_challenge.created = challenge_info.get('created')
+    new_challenge.created_on = challenge_info.get('created_on')
 
     db.session.add(new_challenge)
     db.session.flush()
@@ -263,7 +263,7 @@ def handle_add_new_challenge_by_user(request, userid):
             new_opponent = Challenge_Opponents()
             new_opponent.challenge_id = new_challenge.id
             new_opponent.opponent_id = opponent
-            issue_date = new_challenge.created
+            issue_date = new_challenge.created_on
 
             db.session.add(new_opponent)              
 

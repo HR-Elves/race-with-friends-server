@@ -12,7 +12,7 @@ class Challenge(db.Model):
     description = db.Column(db.Text)
     message = db.Column(db.Text)
     challenger_id = db.Column(db.Text, index=True)
-    created = db.Column(db.Text)
+    created_on = db.Column(db.Text)
 
     def as_Dict(self):
         selfAsDict = {
@@ -22,7 +22,7 @@ class Challenge(db.Model):
             'description' : self.description,
             'message' : self.message,
             'challenger_id' : self.challenger_id,
-            'created' : self.created,
+            'created_on' : self.created_on,
             'opponents' : []
         }
 
