@@ -31,7 +31,7 @@ connection.connect(err => {
 
 connection.on('error', function(err) {
   if (err.fatal) {
-    setInterval(() => {
+    setTimeout(() => {
       connection.connect();
     }, 1000)
   }
