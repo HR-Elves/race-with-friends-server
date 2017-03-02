@@ -20,6 +20,7 @@ test:
     - docker-compose run router npm test
     - docker-compose run usersservice npm test
     - docker-compose run runsservice python /app/unit_tests.py
+    - docker-compose run challengesservice python /app/unit_tests.py    
 
 deployment:
   staging:
