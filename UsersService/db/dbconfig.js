@@ -14,8 +14,12 @@ var relationshipsTable = 'CREATE TABLE relationships (' +
   'UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)' +
 ');';
 
+exports.insertUser = function(req, res) {
 
-exports.dropTables = function(req, res) => {
+}
+
+
+exports.dropTables = function(req, res) {
   connection.query('DROP TABLE users;', (err, success) => {
     if (!err) {
       connection.query('DROP TABLE relationships;', (err, success) => {
@@ -33,7 +37,7 @@ exports.createTables = function(req, res) {
     if (err) {
       res.status(400).send(err);
       res.end();
-    } else (!err) {
+    } else {
       connection.query(relationshipsTable, (err, success) => {
         if (err) {
           res.status(400).send(err);

@@ -30,7 +30,7 @@ app.get('/users/all', routeHelpers.getAllUsers);
 app.get('/friends/all/:userId', routeHelpers.getFriends);
 
 //dev endpoint for dropping and adding tables
-app.delete('/droptables', dbconfig.droptables);
+app.delete('/droptables', dbconfig.dropTables);
 app.post('/createtables', dbconfig.createTables);
 
 
