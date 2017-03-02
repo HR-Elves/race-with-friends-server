@@ -15,6 +15,7 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   docker push hr52elves/router:latest
   docker push hr52elves/runsservice:latest
   docker push hr52elves/usersservice:latest
+  docker push hr52elves/challengesservice:latest
 
   echo "stopping running application"
   ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker-compose down;'
