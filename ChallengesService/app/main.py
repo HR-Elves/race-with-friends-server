@@ -46,15 +46,22 @@ def handle_challanges_opponent_lookup():
         return handle_get_challenge_by_opponent(request)
 
 #################################################
-# Challenge's Opponents (adding and retriing)
+# Challenge's Opponents (adding and retrieving)
 #################################################
 
-@app.route("/challenges/<challengeid>/opponents", methods=['GET', 'POST'])
-def handle_challenge_opponent_operations(challengeid):
+@app.route("/challenges/<challengeid>/opponents", methods=['GET', 'POST', 'DELETE'])
+def handle_challenge_opponents_operations(challengeid):
     if (request.method == 'GET'):
         return handle_get_challenge_opponents(request, challengeid)
     elif (request.method == 'POST'):
         return handle_add_challenge_opponents(request, challengeid)
+    elif (request.method == 'DELETE'):
+        return handle_delete_challenge_opponents(request, challengeid)        
+
+@app.route("/challenges/<challengeid>/opponents/<opponentid>", methods=['POST', 'DELETE'])
+def handle_challange_opponent_operations(challengeid, opponentid):
+    if (request.method == 'DELETE'):
+        return handle_remove_challenge_opponent(request, challengeid, opponentid)
 
 ##################################
 # User's Challenges (with userid)

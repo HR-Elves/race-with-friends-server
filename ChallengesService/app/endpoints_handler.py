@@ -101,8 +101,8 @@ def handle_get_challenge_opponents(request, challengeid):
 def handle_add_challenge_opponents(request, challengeid):
     response = Response()
 
-    new_opponent_id = request.get_json().get('opponent_id')
-    if new_opponent_id is None:
+    new_opponent_ids = request.get_json()
+    if new_opponent_ids is None:
         response.status_code = 400
         return response
 
@@ -117,12 +117,95 @@ def handle_add_challenge_opponents(request, challengeid):
     else:
         response.status_code = 200
 
-        challenge_opponents = Challenge_Opponents()
-        challenge_opponents.challenge_id = retrieved_challenge.id
-        challenge_opponents.opponent_id = new_opponent_id
-        challenge_opponents.issue_date = retrieved_challenge.created
+        for new_opponent_id in new_opponent_ids:
 
+            # Check to see if this proposed new opponent already exist for this challenge
+            opponentAlreadyExist = Challenge_Opponents.query.filter_by(opponent_id=new_opponent_id).filter_by(challenge_id=challengeid).all()
+
+            # Only add opponent to the challenge if it's not already exist
+            if opponentAlreadyExist is None or len(opponentAlreadyExist) == 0:
+                challenge_opponents = Challenge_Opponents()
+                challenge_opponents.challenge_id = retrieved_challenge.id
+                challenge_opponents.opponent_id = new_opponent_id
+                challenge_opponents.issue_date = retrieved_challenge.created
+                db.session.add(challenge_opponents)
+
+        db.session.commit()
+
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+
+    return response
+
+def handle_delete_challenge_opponents(request, challengeid):
+    response = Response()
+
+    try:
+        retrieved_challenge = Challenge.query.get(challengeid)
+    except:
+        response.status_code = 404
+        return response    
+
+    if retrieved_challenge is None:
+        response.status_code = 404
+    else:
+        response.status_code = 200
+
+        retrieved_challenge_opponents = Challenge_Opponents.query.filter_by(challenge_id=challengeid).all()
+        for challenge_opponent in retrieved_challenge_opponents:
+            db.session.delete(challenge_opponent)
+
+        db.session.commit()
+
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+
+    return response
+
+def handle_add_challenge_opponent(request, challengeid, opponentid):
+    response = Response()
+
+    try:
+        retrieved_challenge = Challenge.query.get(challengeid)
+    except:
+        response.status_code = 404
+        return response    
+
+    if retrieved_challenge is None:
+        response.status_code = 404
+    else:
+        response.status_code = 200
+
+        challenge_opponents = Challenge_Opponents(opponent_id=opponent_id)
+        challenge_opponents.challenge_id = retrieved_challenge.id
+        challenge_opponents.opponent_id = opponentid
+        challenge_opponents.issue_date = retrieved_challenge.created
         db.session.add(challenge_opponents)
+        db.session.commit()
+
+        response.status_code = 200
+        response.headers['Content-Type'] = 'application/json'
+
+    return response
+
+def handle_remove_challenge_opponent(request, challengeid, opponentid):
+    response = Response()
+
+    try:
+        retrieved_challenge = Challenge.query.get(challengeid)
+    except:
+        response.status_code = 404
+        return response    
+
+    if retrieved_challenge is None:
+        response.status_code = 404
+    else:
+        response.status_code = 200
+
+        retrieved_challenge_opponents = Challenge_Opponents.query.filter_by(challenge_id=challengeid).filter_by(opponent_id=opponentid).all()
+        for challenge_opponent in retrieved_challenge_opponents:
+            db.session.delete(challenge_opponent)
+
         db.session.commit()
 
         response.status_code = 200
