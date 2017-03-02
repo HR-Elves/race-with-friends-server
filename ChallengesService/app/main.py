@@ -8,14 +8,14 @@ import json
 app = Flask(__name__)
 
 # When running locally
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://<username>:<password>@localhost:5432/<databasename>'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://<username>:<password>@localhost:5432/<databasename>'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://elves:elves@localhost:5432/rwfruns' 
 
 # When running within a container
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://elves:elves@runsdb:5432/rwfruns'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True      
 
-from dbmodels import db, Run, DataPoint
+from dbmodels import db, Challenge, Challenge_Opponents
 from endpoints_handler import *
 
 
@@ -32,11 +32,9 @@ def root():
 @app.route("/challenges/<challengeid>", methods=['GET', 'DELETE'])
 def handle_challenges(challengeid):
     if (request.method == 'GET'):
-        # return handle_get_challenge(request, challengeid)
-        return "Reached GET /challenges/<challengeid>"
+        return handle_get_challenge(request, challengeid)
     elif (request.method == 'DELETE'):
-        # return handle_delete_challange(request, challengeid)
-        return "Reached DELETE /challenges/<challengeid>"
+        return handle_delete_challange(request, challengeid)
 
 #######################################################
 # Retriving All Challenges where a User is an opponent
@@ -45,21 +43,25 @@ def handle_challenges(challengeid):
 @app.route("/challenges", methods=['GET'])
 def handle_challanges_opponent_lookup():
     if (request.method == 'GET'):
-        # return handle_get_challenge_by_opponent(request)
-        return "Reached GET /challenges"
+        return handle_get_challenge_by_opponent(request)
 
 #################################################
-# Challenge's Opponents (adding and removing)
+# Challenge's Opponents (adding and retrieving)
 #################################################
 
-@app.route("/challenges/<challengeid>/opponents", methods=['GET', 'POST'])
-def handle_challenge_opponent_operations(challengeid):
+@app.route("/challenges/<challengeid>/opponents", methods=['GET', 'POST', 'DELETE'])
+def handle_challenge_opponents_operations(challengeid):
     if (request.method == 'GET'):
-        # return handle_get_challenge_opponents(request, challengeid)
-        return "Reached GET /challenges/<challengeid>/opponents"
+        return handle_get_challenge_opponents(request, challengeid)
     elif (request.method == 'POST'):
-        # return handle_add_challenge_opponents(request, challengeid)
-        return "Reached POST /challenges/<challengeid>/opponents"
+        return handle_add_challenge_opponents(request, challengeid)
+    elif (request.method == 'DELETE'):
+        return handle_delete_challenge_opponents(request, challengeid)        
+
+@app.route("/challenges/<challengeid>/opponents/<opponentid>", methods=['POST', 'DELETE'])
+def handle_challange_opponent_operations(challengeid, opponentid):
+    if (request.method == 'DELETE'):
+        return handle_remove_challenge_opponent(request, challengeid, opponentid)
 
 ##################################
 # User's Challenges (with userid)
@@ -68,11 +70,9 @@ def handle_challenge_opponent_operations(challengeid):
 @app.route("/users/<userid>/challenges", methods=['GET', 'POST', 'DELETE'])
 def handle_user_challenges(userid):
     if (request.method == 'GET'):
-        # return handle_get_user_challenges(request, userid)
-        return "Reached GET /users/<userid>/challenges"
+        return handle_get_user_challenges(request, userid)
     elif (request.method == 'POST'):
-        # return handle_add_new_challenge_by_user(request, userid)
-        return "Reached POST /users/<userid>/challenges"
+        return handle_add_new_challenge_by_user(request, userid)
 
 ##################
 # Maintenance

@@ -10,7 +10,7 @@ class Challenge(db.Model):
     description = db.Column(db.Text)
     message = db.Column(db.Text)
     challenger_id = db.Column(db.Text, index=True)
-    created_on = db.Column(db.Text)
+    created = db.Column(db.Text)
 
     def as_Dict(self):
         selfAsDict = {
@@ -20,16 +20,16 @@ class Challenge(db.Model):
             'description' : self.description,
             'message' : self.message,
             'challenger_id' : self.challenger_id,
-            'created_on' : self.created_on,
+            'created' : self.created,
             'opponents' : []
         }
 
-        challenge_opponents = Challenge_Opponents.query.filter_by(challenge_id=self.id)
+        challenge_opponents = Challenge_Opponents.query.filter_by(challenge_id=self.id).all()
         if challenge_opponents is not None:
             for challenge in challenge_opponents:
                 selfAsDict['opponents'].append(challenge.opponent_id)
 
-        return selfAsDict        
+        return selfAsDict
 
 class Challenge_Opponents(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)

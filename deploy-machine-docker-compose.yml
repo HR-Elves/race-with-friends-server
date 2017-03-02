@@ -45,6 +45,14 @@ services:
       - usersservice
       - runsdb
 
+  challengesservice:
+    build: hr52elves/challengesservice:latest
+    ports:
+      - "5001:80"
+    depends_on:
+      - usersservice
+      - runsdb
+
   runsdb:
     # Inside the container, access the database via:
     # psql -h localhost -p 5432 rwfruns elves
