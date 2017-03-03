@@ -8,7 +8,9 @@ const url = require('url');
 
 const port = process.env.PORT || 5000;
 
-var LiveRace = require('./src/LiveRace.js');
+let LiveRace = require('./src/LiveRace.js');
+let LiveRaces = {};
+let LiveRacesCount = 0;
 
 var counter = 0;
 
@@ -20,13 +22,67 @@ app.get('/', function (req, res) {
   counter++;  
 });
 
-// Retrive all pending live races by a participant
-app.get('/users/:userid/liveraces', function (req, res) {
+// Retrieve all liveraces where the user is a participant
+// Supplied by a query parameter ?userid=<someUserID>
+app.get('/liveraces', function (request, response) {
+
+  let currentUserID = request.query.participantID;
+  if (currentUserID) {
+    let participatedRaceIDs = [];
+
+    for (raceID in LiveRaces) {
+      let currentRace = LiveRaces[raceID];
+      if (currentRace.participantsIDs.includes(currentUserID)) {
+        participatedRaceIDs.push(currentRace.id);
+      }
+    }
+    response.json(participatedRaceIDs);
+
+  } else {
+    response.statusCode = 404;
+    response.send();
+    response.end();
+  }
+});
+
+// Retrive all live races organised by a user
+app.get('/users/:userid/liveraces', function (request, response) {
+  resultRaceIDs = [];
+
+  for (raceID in LiveRaces) {
+    currentLiveRace = LiveRaces[raceID];
+    if (currentLiveRace.organiserID === request.params.userid) {
+      resultRaceIDs.push(currentLiveRace.id);
+    }
+  }
+
+  response.json(resultRaceIDs);
 
 });
 
 // Create a new liverace
-app.post('/users/:userid/liveraces', function (req, res) {
+app.post('/users/:userid/liveraces', function (request, response) {
+  let raceOpponentIDs = request.body.opponentIDs;
+  let raceName = request.body.name;
+  let raceDescription = request.body.description;
+
+  // Detect invalid inputs
+  if (raceOpponentIDs === undefined || Array.isArray(raceOpponentIDs) === false) {
+    response.statusCode = 400;
+    response.send();
+    response.end();
+    return;
+  }
+
+  let newLiveRaceID = LiveRacesCount;
+  let newLiveRace = new LiveRace(newLiveRaceID, raceName, raceDescription, request.params.userid, raceOpponentIDs);
+  LiveRaces[newLiveRaceID] = newLiveRace;
+
+  LiveRacesCount = LiveRacesCount + 1;
+
+  // console.log(JSON.stringify(newLiveRace));
+
+  response.json({id: newLiveRace.id});
 
 });
 
@@ -44,55 +100,47 @@ var wss = new WebSocketServer({
 ////////////////////////////////////////////////
 // Handler for Message Passing via Websockets //
 ////////////////////////////////////////////////
-
-// Object to store connected clients associated with a specific raceid
-let ClientInRace = {};
-
 wss.on('connection', function connection(ws) {
   console.log('websocket connection recieved');
 
   // Extract supplied query string values
   let parsedURL = url.parse(ws.upgradeReq.url);
   let queryStringValues = querystring.parse(parsedURL.query);
+  ws.userID = queryStringValues.userid;
 
   // Parse URI path for the raceID
   // Expected URI is /liveraces/:raceID
   ws.raceID = parsePathForRaceID(parsedURL.pathname);
 
-  // Save this client under a raceID
-  if (ws.raceID !== undefined) {
-    if (ClientInRace[ws.raceID] === undefined) {
-      ClientInRace[ws.raceID] = [];
-    }
-    ClientInRace[ws.raceID].push(ws);
+  // Add participant to Race
+  if (LiveRaces[raceID]) {
+    LiveRaces[raceID].addParticipantToLobby(ws.userID);
+  } else {
+    ws.send('Error: No Race with Supplied RaceID exists');
+    ws.close();
   }
 
-  // Handle broadcasting of messages to all race participants
+  // Handle Incoming Messages
   ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-    if (ws.raceID) {
-      ClientInRace[ws.raceID].forEach(function(participantsWS) {
-        // Only send to the other reace participants
-        if (participantsWS !== ws) {
-          participantsWS.send(message);
-        }
-      });
+    switch (message[0]) {
+    case 'ready':
+      LiveRaces[ws.raceID].setParticipantIsReady(ws.userID);
+      break;
+    case 'not-ready':
+      LiveRaces[ws.raceID].unsetParticipantIsReady(ws.userID);    
+      break;
+    case 'position-update':
+      LiveRaces[ws.raceID].broadcastPosition(ws.userID, message[1]);
     }
   });
 
   // Remove user from race if connection is closed
   ws.on('close', function close() {
     console.log('connection closed, connection belongs to: raceID:', ws.raceID);
-    listOfClientsInRace = ClientInRace[ws.raceID];
-
-    if (listOfClientsInRace.indexOf(ws) !== -1) {
-      listOfClientsInRace.splice(listOfClientsInRace.indexOf(ws), 1);
-    }
+    LiveRaces[ws.raceID].removeParticipantFromLobby(ws.userID);
 
     console.log('disconnected');
   });
-
-  ws.send('something');
 });
 
 function parsePathForRaceID(inputPathName) {
