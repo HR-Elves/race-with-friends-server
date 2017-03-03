@@ -133,18 +133,11 @@ function attachProxy(proxyTable) {
 }
 
 const httpsServer = https.createServer(credentials, app).listen(port, function() {
-  console.log('Example app listening on port: ', port);
+  console.log('Router HTTPS Server listening on port: ', port);
 });
 
-const WebSocketServer = require('ws').Server;
-var wss = new WebSocketServer({
-  server: httpsServer
+// Set up proxy for websocket connection forwarding to LiveracesService service
+httpsServer.on('upgrade', function (req, socket, head) {
+  proxy.ws(req, socket, head, {target: 'ws://liveracesservice:5000'});
 });
 
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-  });
-
-  ws.send('something');
-});

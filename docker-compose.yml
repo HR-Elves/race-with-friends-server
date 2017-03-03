@@ -7,6 +7,7 @@ services:
     depends_on:
       - runsservice
       - usersservice
+      - liveracesservice
     volumes:
       - /etc/letsencrypt/:/etc/letsencrypt/
 
@@ -52,6 +53,13 @@ services:
     depends_on:
       - usersservice
       - runsdb
+
+  liveracesservice:
+    build: ./LiveracesService/.
+    ports:
+      - "5002:5000"
+    depends_on:
+      - usersservice
 
   runsdb:
     # Inside the container, access the database via:
