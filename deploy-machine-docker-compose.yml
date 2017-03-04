@@ -54,7 +54,7 @@ services:
       - runsdb
 
   liveracesservice:
-    build: hr52elves/liveracesservice:latest
+    image: hr52elves/liveracesservice:latest
     ports:
       - "5002:5000"
     depends_on:
