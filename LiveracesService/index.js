@@ -77,6 +77,7 @@ app.post('/users/:userid/liveraces', function (request, response) {
   let newLiveRaceID = LiveRacesCount;
   let newLiveRace = new LiveRace(newLiveRaceID, raceName, raceDescription, request.params.userid, raceOpponentIDs);
   LiveRaces[newLiveRaceID] = newLiveRace;
+  console.log('New Live Race:', JSON.stringify(LiveRaces[newLiveRaceID]));
 
   LiveRacesCount = LiveRacesCount + 1;
 
@@ -101,7 +102,7 @@ var wss = new WebSocketServer({
 // Handler for Message Passing via Websockets //
 ////////////////////////////////////////////////
 wss.on('connection', function connection(ws) {
-  console.log('websocket connection recieved');
+  console.log('Websocket onConnect');
 
   // Extract supplied query string values
   let parsedURL = url.parse(ws.upgradeReq.url);
@@ -112,16 +113,34 @@ wss.on('connection', function connection(ws) {
   // Expected URI is /liveraces/:raceID
   ws.raceID = parsePathForRaceID(parsedURL.pathname);
 
+  console.log('userID: ', ws.userID);
+  console.log('raceID: ', ws.raceID);
+
   // Add participant to Race
-  if (LiveRaces[raceID]) {
-    LiveRaces[raceID].addParticipantToLobby(ws.userID);
+  if (LiveRaces[ws.raceID]) {
+    LiveRaces[ws.raceID].addParticipantToLobby(ws.userID, ws);
+    console.log('OK: RaceID found, adding participant');
   } else {
+    console.log('ERROR: No race with Supplied RaceID exists');
     ws.send('Error: No Race with Supplied RaceID exists');
     ws.close();
   }
 
   // Handle Incoming Messages
-  ws.on('message', function incoming(message) {
+  ws.on('message', function incoming(messagetext) {
+    console.log('Message Recieved: ', messagetext);
+    let message = undefined;
+    try {
+      message = JSON.parse(messagetext);
+      if (message.length === 0) {
+        console.log('Parsed Message Length is Zero, No Action');
+        return;
+      }
+    } catch (e) {
+      console.log('indexjs: Error on JSON.parse(): ', e);
+      return;
+    }
+    console.log(message);
     switch (message[0]) {
     case 'ready':
       LiveRaces[ws.raceID].setParticipantIsReady(ws.userID);
@@ -131,13 +150,21 @@ wss.on('connection', function connection(ws) {
       break;
     case 'position-update':
       LiveRaces[ws.raceID].broadcastPosition(ws.userID, message[1]);
+      break;
     }
+
+    return;
   });
 
   // Remove user from race if connection is closed
   ws.on('close', function close() {
-    console.log('connection closed, connection belongs to: raceID:', ws.raceID);
-    LiveRaces[ws.raceID].removeParticipantFromLobby(ws.userID);
+    console.log('Websocket onClose called: WS connection with raceID:', ws.raceID);
+
+    if (ws.raceID !== undefined && LiveRaces[ws.raceID] !== undefined) {
+      LiveRaces[ws.raceID].removeParticipantFromLobby(ws.userID);
+    } else {
+      console.log('No Race Corresponding to RaceID found');
+    }
 
     console.log('disconnected');
   });

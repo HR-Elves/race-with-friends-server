@@ -29,61 +29,69 @@ class LiveRace {
   }
 
   addParticipantToLobby(participantID, participantWS) {
-    if (participants[participantID] !== undefined) {
-      participants[participantID].inLobby = true;
-      participants[participantID].ws = participantWS;
+    console.log('LiveRace.js: addParticipantToLobby called');    
+    if (this.participants[participantID] !== undefined) {
+      this.participants[participantID].inLobby = true;
+      this.participants[participantID].ws = participantWS;
     }
     this.sendLobbyStatus();    
   }
 
   removeParticipantFromLobby(participantID, participantWS) {
-    if (participants[participantID] !== undefined) {
-      participants[participantID].inLobby = false;
-      participants[participantID].isReady = false;      
-      participants[participantID].ws = undefined;
+    console.log('LiveRace.js: removeParticipantFromLobby called'); 
+    if (this.participants[participantID] !== undefined) {
+      this.participants[participantID].inLobby = false;
+      this.participants[participantID].isReady = false;      
+      this.participants[participantID].ws = undefined;
     }
     this.sendLobbyStatus();    
   }
 
   setParticipantIsReady(participantID) {
-    if (participants[participantID] !== undefined) {
-      participants[participantID].isReady = false;      
+    console.log('LiveRace.js: setParticipantIsReady called');        
+    if (this.participants[participantID] !== undefined) {
+      this.participants[participantID].isReady = true;      
     }
     this.sendLobbyStatus();    
   }
 
   unsetParticipantIsReady(participantID) {
-    if (participants[participantID] !== undefined) {
-      participants[participantID].isReady = false;      
+    console.log('LiveRace.js: unsetParticipantIsReady called');        
+    if (this.participants[participantID] !== undefined) {
+      this.participants[participantID].isReady = false;      
     }
     this.sendLobbyStatus();
   }
 
   broadcastPosition(originatorID, positionMessage) {
-    this.participants.forEach(participant => {
-      lobbyStatusUpdateMessage = ['lobbystatus', this.getLobbyStatusAsJSON()];
+    for (let participantID in this.participants) {
+      let participant = this.participants[participantID];
+      let lobbyStatusUpdateMessage = ['lobbystatus', this.getLobbyStatusAsJSON()];
       if (participant.ws !== undefined && participant.id !== originatorID) {
         participant.ws.send('position-update', positionMessage);
       }
-    });
+    }
   }
 
   sendLobbyStatus() {
-    this.participants.forEach(participant => {
-      lobbyStatusUpdateMessage = ['lobbystatus', this.getLobbyStatusAsJSON()];
+    console.log('LiveRace.js: sendLobbyStatus called');
+    for (let participantID in this.participants) {
+      let participant = this.participants[participantID];
+      let lobbyStatusUpdateMessage = ['lobbystatus', this.getLobbyStatusAsJSON()];
       if (participant.ws !== undefined) {
         participant.ws.send(JSON.stringify(lobbyStatusUpdateMessage));
       }
-    });
+    }
   }
 
   getLobbyStatusAsJSON() {
-    statusMessage = {};
+    let statusMessage = {};
     statusMessage.name = this.name;
     statusMessage.organiserID = this.organiserID;
     statusMessage.participants = [];
 
-    for (participant in this.participants) {
+    for (let participantID in this.participants) {
+      let participant = this.participants[participantID];
       statusMessage.participants.push({
         id: participant.id,
         name: participant.name,
@@ -96,6 +104,8 @@ class LiveRace {
     statusMessage.length = this.length;
     statusMessage.startTime = this.startTime;
     statusMessage.createdOn = this.createdOn;
+
+    return statusMessage;
   }
 
 }
