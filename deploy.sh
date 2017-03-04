@@ -6,7 +6,8 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   docker tag racewithfriendsserver_router:latest hr52elves/router:latest
   docker tag racewithfriendsserver_runsservice:latest hr52elves/runsservice:latest
   docker tag racewithfriendsserver_usersservice:latest hr52elves/usersservice:latest
-  docker tag racewithfriendsserver_challengesservice:latest hr52elves/challengesservice:latest  
+  docker tag racewithfriendsserver_challengesservice:latest hr52elves/challengesservice:latest
+  docker tag racewithfriendsserver_liveracesservice:latest hr52elves/liveracesservice:latest    
 
   # Login to Docker Hub
   docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
@@ -25,7 +26,8 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/router:latest'
   ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/runsservice:latest'
   ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/usersservice:latest'
-  ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/challengesservice:latest'  
+  ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/challengesservice:latest'
+  ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/liveracesservice:latest'    
 
   echo "starting the new version"
   # Copy over new deploy specific docker-compose file

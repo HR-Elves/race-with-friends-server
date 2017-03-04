@@ -53,6 +53,13 @@ services:
       - usersservice
       - runsdb
 
+  liveracesservice:
+    build: hr52elves/liveracesservice:latest
+    ports:
+      - "5002:5000"
+    depends_on:
+      - usersservice
+
   runsdb:
     # Inside the container, access the database via:
     # psql -h localhost -p 5432 rwfruns elves
