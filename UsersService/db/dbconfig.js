@@ -14,9 +14,11 @@ var relationshipsTable = 'CREATE TABLE relationships (' +
   'UNIQUE KEY `friends` (`user_one_id`, `user_two_id`)' +
 ');';
 
-exports.insertUser = function(req, res) {
+// var insertNick = "insert into users (fb_id,fullname,pic)values ('10104841851597483','Nick Cobbett', "
 
-}
+// exports.insertUser = function(req, res) {
+
+// }
 
 
 exports.dropTables = function(req, res) {
