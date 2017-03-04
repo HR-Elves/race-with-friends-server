@@ -17,6 +17,7 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   docker push hr52elves/runsservice:latest
   docker push hr52elves/usersservice:latest
   docker push hr52elves/challengesservice:latest
+  docker push hr52elves/liveracesservice:latest
 
   echo "stopping running application"
   ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker-compose down;'
@@ -37,6 +38,8 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   scp -r ./RunDB/init_testdb.sql $DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/app/RunDB/init_testdb.sql
 
   ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker-compose up -d'
+  ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker images -q --filter "dangling=true" | xargs docker rmi'  
+
   echo "success!"
 
   exit 0  
