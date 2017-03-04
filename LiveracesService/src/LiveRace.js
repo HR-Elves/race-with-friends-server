@@ -66,9 +66,16 @@ class LiveRace {
   broadcastPosition(originatorID, positionMessage) {
     for (let participantID in this.participants) {
       let participant = this.participants[participantID];
-      let lobbyStatusUpdateMessage = ['lobbystatus', this.getLobbyStatusAsJSON()];
       if (participant.ws !== undefined && participant.id !== originatorID) {
-        participant.ws.send('position-update', positionMessage);
+        participant.ws.send(JSON.stringify(['position-update', positionMessage]));
+      }
+    }
+  }
+
+  broadcast(message) {
+    for (let participantID in this.participants) {
+      if (participant.ws !== undefined) {
+        participant.ws.send(JSON.stringify(message));
       }
     }
   }

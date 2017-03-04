@@ -128,7 +128,7 @@ wss.on('connection', function connection(ws) {
 
   // Handle Incoming Messages
   ws.on('message', function incoming(messagetext) {
-    console.log('Message Recieved: ', messagetext);
+    console.log('Message Recieved, Message Text: ', messagetext);
     let message = undefined;
     try {
       message = JSON.parse(messagetext);
@@ -140,7 +140,7 @@ wss.on('connection', function connection(ws) {
       console.log('indexjs: Error on JSON.parse(): ', e);
       return;
     }
-    console.log(message);
+    console.log('Parsed Message: ', message);
     switch (message[0]) {
     case 'ready':
       LiveRaces[ws.raceID].setParticipantIsReady(ws.userID);
@@ -151,6 +151,9 @@ wss.on('connection', function connection(ws) {
     case 'position-update':
       LiveRaces[ws.raceID].broadcastPosition(ws.userID, message[1]);
       break;
+    // Default will be to broadcast all messages
+    default:
+      LiveRaces[ws.raceID].broadcast(message);
     }
 
     return;
