@@ -34,7 +34,11 @@ const proxyTable = [
   { action: 'delete', route: '/challenges/:challengeid/opponents', target: 'http://challengesservice:80' },
   { action: 'delete', route: '/challenges/:challengeid/opponents/:opponentid', target: 'http://challengesservice:80' },
   { action: 'get', route: '/users/:userid/challenges', target: 'http://challengesservice:80' },
-  { action: 'post', route: '/users/:userid/challenges', target: 'http://challengesservice:80' },      
+  { action: 'post', route: '/users/:userid/challenges', target: 'http://challengesservice:80' },
+
+  { action: 'get', route: '/liveraces', target: 'http://liveracesservice:5000' },
+  { action: 'get', route: '/users/:userid/liveraces', target: 'http://liveracesservice:5000' },
+  { action: 'post', route: '/users/:userid/liveraces', target: 'http://liveracesservice:5000' },
     
   { action: 'post', route: '/adduser', target: 'http://usersservice:5000' },
   { action: 'post', route: '/addfriend', target: 'http://usersservice:5000' },
@@ -125,6 +129,7 @@ function attachProxy(proxyTable) {
 
   function proxyTo(target) {
     return function (req, res) {
+      console.log('Request Path', req.url, ' --> Proxy to target: ', target);
       proxy.web(req, res, {
         target: target
       });
