@@ -39,7 +39,8 @@ app.get('/liveraces', function (request, response) {
     response.json(participatedRaceIDs);
 
   } else {
-    response.statusCode = 404;
+    response.statusCode = 400;
+    response.statusMessage = 'Error: QueryString parameter "participantID" required';
     response.send();
     response.end();
   }
@@ -62,6 +63,7 @@ app.get('/users/:userid/liveraces', function (request, response) {
 
 // Create a new liverace
 app.post('/users/:userid/liveraces', function (request, response) {
+  console.log('POST to /users/:userid/liveraces invoked');
   let raceOpponentIDs = request.body.opponentIDs;
   let raceName = request.body.name;
   let raceDescription = request.body.description;
