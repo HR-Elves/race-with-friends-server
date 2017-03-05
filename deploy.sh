@@ -6,7 +6,8 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   docker tag racewithfriendsserver_router:latest hr52elves/router:latest
   docker tag racewithfriendsserver_runsservice:latest hr52elves/runsservice:latest
   docker tag racewithfriendsserver_usersservice:latest hr52elves/usersservice:latest
-  docker tag racewithfriendsserver_challengesservice:latest hr52elves/challengesservice:latest  
+  docker tag racewithfriendsserver_challengesservice:latest hr52elves/challengesservice:latest
+  docker tag racewithfriendsserver_liveracesservice:latest hr52elves/liveracesservice:latest    
 
   # Login to Docker Hub
   docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
@@ -16,6 +17,7 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   docker push hr52elves/runsservice:latest
   docker push hr52elves/usersservice:latest
   docker push hr52elves/challengesservice:latest
+  docker push hr52elves/liveracesservice:latest
 
   echo "stopping running application"
   ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker-compose down;'
@@ -25,7 +27,8 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/router:latest'
   ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/runsservice:latest'
   ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/usersservice:latest'
-  ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/challengesservice:latest'  
+  ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/challengesservice:latest'
+  ssh $DEPLOY_USER@$DEPLOY_HOST 'docker pull hr52elves/liveracesservice:latest'    
 
   echo "starting the new version"
   # Copy over new deploy specific docker-compose file
@@ -35,6 +38,8 @@ if [ "$DEPLOYTOSTAGING" = "TRUE" ]; then
   scp -r ./RunDB/init_testdb.sql $DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/app/RunDB/init_testdb.sql
 
   ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker-compose up -d'
+  ssh $DEPLOY_USER@$DEPLOY_HOST 'cd /home/ubuntu/app/; docker images -q --filter "dangling=true" | xargs docker rmi'  
+
   echo "success!"
 
   exit 0  
