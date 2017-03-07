@@ -67,24 +67,26 @@ app.post('/users/:userid/liveraces', function (request, response) {
   let raceOpponentIDs = request.body.opponentIDs;
   let raceName = request.body.name;
   let raceDescription = request.body.description;
+  let raceLength = request.body.length;
 
   // Detect invalid inputs
   if (raceOpponentIDs === undefined || Array.isArray(raceOpponentIDs) === false) {
     response.statusCode = 400;
     response.send();
     response.end();
+    console.log('invalid input for POST');
     return;
   }
 
   let newLiveRaceID = LiveRacesCount;
-  let newLiveRace = new LiveRace(newLiveRaceID, raceName, raceDescription, request.params.userid, raceOpponentIDs);
+  let newLiveRace = new LiveRace(newLiveRaceID, raceName, raceDescription, raceLength, request.params.userid, raceOpponentIDs);
   LiveRaces[newLiveRaceID] = newLiveRace;
   console.log('New Live Race:', JSON.stringify(LiveRaces[newLiveRaceID]));
 
   LiveRacesCount = LiveRacesCount + 1;
 
   // console.log(JSON.stringify(newLiveRace));
-
+  console.log('LiveraceLobby Created:', {id: newLiveRace.id});
   response.json({id: newLiveRace.id});
 
 });

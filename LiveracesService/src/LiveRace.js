@@ -1,6 +1,8 @@
 class LiveRace {
-  constructor(liveRaceID, raceName, raceDescription, organiserID, opponentIDs) {
+  constructor(liveRaceID, raceName, raceDescription, raceLength, organiserID, opponentIDs) {
     this.id = liveRaceID;
+    this.raceName = raceName;
+    this.raceDescription = raceDescription;
     this.organiserID = organiserID;
     this.participants = {};
 
@@ -19,7 +21,7 @@ class LiveRace {
     });
 
     this.duration = undefined;
-    this.length = undefined;
+    this.length = raceLength;
     this.startTime = undefined;
     this.createdOn = new Date().toISOString();
   }
@@ -93,7 +95,8 @@ class LiveRace {
 
   getLobbyStatusAsJSON() {
     let statusMessage = {};
-    statusMessage.name = this.name;
+    statusMessage.name = this.raceName;
+    statusMessage.description = this.raceDescription;
     statusMessage.organiserID = this.organiserID;
     statusMessage.participants = [];
 
